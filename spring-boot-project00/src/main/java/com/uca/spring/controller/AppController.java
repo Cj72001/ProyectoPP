@@ -36,7 +36,17 @@ public class AppController {
 		  //return "pagina principal"  -> si existe el usuario y se autentica e identifica
 		  return "login.jsp";
 	  }		  
-  } 
+  }
+  
+  @PostMapping("/registrarEstudiante")
+  public String registrarEstudiante(@RequestParam("nombreRe") String nombreRe,
+		  @RequestParam("carnetRe") String carnetRe, 
+		  @RequestParam("passwordRe") String passwordRe,
+		  @RequestParam("passwordRe2") String passwordRe2,
+		  ModelMap modelMap){ 
+	  
+		  return "regUpdateSuccess.jsp";
+	  }
 }
 
     
