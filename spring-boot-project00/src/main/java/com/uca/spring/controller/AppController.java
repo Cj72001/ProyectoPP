@@ -17,18 +17,26 @@ public class AppController {
 	  
     return "login.jsp";
   }
-   
+  
+  
   @PostMapping("/loginn")   
   public String login(@RequestParam("CARNET") String CARNET,
 		  @RequestParam("PASSWORD") String PASSWORD, 
 		  ModelMap modelMap){ 
 	  
+	//Validacion para campos
+	  if(CARNET.isEmpty() || PASSWORD.isEmpty()) {
+		  modelMap.put("errorL","No deje espacios en blanco");
 		  return "login.jsp";
-				  
+	  }
+	  else {
+		
+		  //Si no hay usuarios
+		  //Vamos a evaluar si el estudiante que desea logearse existe:
+		  //return "pagina principal"  -> si existe el usuario y se autentica e identifica
+		  return "login.jsp";
+	  }		  
   } 
-  
-   
-  
 }
 
     
