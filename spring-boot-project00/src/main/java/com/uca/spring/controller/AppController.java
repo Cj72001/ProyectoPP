@@ -35,7 +35,7 @@ public class AppController {
 		  //Vamos a evaluar si el estudiante que desea logearse existe:
 		  //return "pagina principal"  -> si existe el usuario y se autentica e identifica
 		  return "login.jsp";
-	  }		  
+	  }
   }
   
   @PostMapping("/registrarEstudiante")
