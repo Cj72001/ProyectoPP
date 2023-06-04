@@ -47,7 +47,22 @@ public class AppController {
 	  
 		  return "regUpdateSuccess.jsp";
 	  }
-}
+  
+//para actualizar contrasena
+  @PostMapping("/actualizarContrasena")
+  public String actualizarContrasena(@RequestParam("nombrePR") String nombrePR,
+		  @RequestParam("carnetPR") String carnetPR, 
+		  @RequestParam("passwordPR") String passwordPR,
+		  ModelMap modelMap){
+	  
+	  
+		  return "passwordRecover.jsp";
+	  } 
+	
+  } 
+  
+  
+  
 
     
 	  
