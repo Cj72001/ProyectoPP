@@ -48,6 +48,14 @@ public class AppController {
 		  return "regUpdateSuccess.jsp";
 	  }
   
+  @GetMapping("/mainPage")
+  public String mainPage(ModelMap modelMap) {
+	  
+	  //TODO Lista de tabla Estudiante
+	  
+    return "mainPage.jsp";
+  } 
+  
 //para actualizar contrasena
   @PostMapping("/actualizarContrasena")
   public String actualizarContrasena(@RequestParam("nombrePR") String nombrePR,
