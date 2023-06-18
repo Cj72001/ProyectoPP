@@ -636,16 +636,44 @@ public class AppController {
   
   
   
-//para actualizar contrasena
+  //para actualizar contrasena
   @PostMapping("/actualizarContrasena")
   public String actualizarContrasena(@RequestParam("nombrePR") String nombrePR,
 		  @RequestParam("carnetPR") String carnetPR, 
 		  @RequestParam("passwordPR") String passwordPR,
 		  ModelMap modelMap){
 	  
+	  
+	  //Lista de tabla Estudiante
+	  List<Estudiante> estudiantes = new ArrayList<Estudiante>();
+	  estudianteService.getEstudiantes().forEach(e -> estudiantes.add(e));
+	  
+	  
+	  estudiantes.forEach( e -> {
+		 if(e.getNombreEstudiante().equals(nombrePR) && e.getCarnetEstudiante().toString().equals(carnetPR)) {
+			 estudianteService.updateEstudiante(e, passwordPR);
+			 contraActualizada = true;
+		 }
+	  });
+	  
+	  
+	  //Si los datos escritos estan en la bdd
+	  if(contraActualizada){
+		  //Se actualizo la contrasena
+		  
+		  modelMap.put("nombreEstudiantePUS", estudianteEjemplo.getNombreEstudiante());
+		  return "passUpdateSucess.jsp";
+	  } 
+	  else if(nombrePR.isEmpty() || carnetPR.isEmpty() || passwordPR.isEmpty()) {
+		  modelMap.put("errorPR", "No deje espacios en blanco");
 		  return "passwordRecover.jsp";
+	  }
+	  else { 
+		  modelMap.put("errorPR", "Usuario no encontrado");
+		  return "passwordRecover.jsp";
+	  } 
 	
-  }
+  } 
   
   
 	
