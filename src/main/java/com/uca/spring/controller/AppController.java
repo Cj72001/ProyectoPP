@@ -1117,7 +1117,7 @@ public class AppController {
 	public String login(@RequestParam("CARNET") Integer CARNET, @RequestParam("PASSWORD") String PASSWORD,
 			ModelMap modelMap) {
 
-		if (CARNET.isEmpty() || PASSWORD.isEmpty()) {
+		if (CARNET.toString().isEmpty() || PASSWORD.isEmpty()) {
 			modelMap.put("errorL", "No deje espacios en blanco");
 			return "login.jsp";
 		} else {
