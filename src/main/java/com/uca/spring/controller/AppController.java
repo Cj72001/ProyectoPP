@@ -1114,7 +1114,7 @@ public class AppController {
 
 	// para loggearse
 	@PostMapping("/loginn")
-	public String login(@RequestParam("CARNET") String CARNET, @RequestParam("PASSWORD") String PASSWORD,
+	public String login(@RequestParam("CARNET") Integer CARNET, @RequestParam("PASSWORD") String PASSWORD,
 			ModelMap modelMap) {
 
 		if (CARNET.isEmpty() || PASSWORD.isEmpty()) {
