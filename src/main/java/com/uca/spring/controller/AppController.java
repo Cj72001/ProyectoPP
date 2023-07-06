@@ -1132,9 +1132,9 @@ public class AppController {
 			String fechaFormateada = fechaActual.format(formatoFecha);
 
 			// Estableciendo la fecha en el objeto newLog
-			//newLog.setFecha(fechaFormateada);
-			//newLog.setCarnet(CARNET);
-			//logsService.createLog(newLog);
+			newLog.setFecha(fechaFormateada);
+			newLog.setCarnet(CARNET);
+			logsService.createLog(newLog);
 
 			// Lista de tabla Estudiante
 			List<Estudiante> estudiantes = new ArrayList<Estudiante>();

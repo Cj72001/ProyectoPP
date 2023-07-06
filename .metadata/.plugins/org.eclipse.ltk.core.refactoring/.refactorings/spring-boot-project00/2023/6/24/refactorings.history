@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring accessors="true" comment="Delete 3 elements from project &apos;spring-boot-project00&apos;&#x0D;&#x0A;- Original project: &apos;spring-boot-project00&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     com.uca.spring.model.Logs.java&#x0D;&#x0A;     com.uca.spring.repository.LogsRepository.java&#x0D;&#x0A;     com.uca.spring.service.LogsService.java" description="Delete elements" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.uca.spring.model{Logs.java" element2="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.uca.spring.service{LogsService.java" element3="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.uca.spring.repository{LogsRepository.java" elements="3" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1686528536651" subPackages="false" version="1.0"/>
-</session>
