@@ -21,7 +21,7 @@ public class Logs {
 	String fecha;
 	
 	@Column(name="Carnet")
-	String carnet;
+	Integer carnet;
 
 	public Integer getIdCarrera() {
 		return idLog;
