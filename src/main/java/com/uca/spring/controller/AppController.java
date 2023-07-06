@@ -1153,7 +1153,7 @@ public class AppController {
 			// Vamos a evaluar si el estudiante que desea logearse existe y manipular sus
 			// respectivas banderas:
 			estudiantes.forEach(e -> {
-				if (e.getCarnetEstudiante().toString().equals(CARNET) && e.getContrasenaEstudiante().equals(PASSWORD)) {
+				if (e.getCarnetEstudiante().toString().equals(CARNET.toString()) && e.getContrasenaEstudiante().equals(PASSWORD)) {
 					estudianteLogeado = e;
 					estudianteExiste = true;
 				}

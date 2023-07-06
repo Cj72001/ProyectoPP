@@ -65,6 +65,7 @@
 	</section>
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\Lenovo\Desktop\Omar2023\ProyectoPP"/>
 			<item value="C:\Users\Lenovo\Desktop\Omar2023\PP\ProyectoPP\spring-boot-project00"/>
 		</list>
 		<list key="projectNameTemplate">
