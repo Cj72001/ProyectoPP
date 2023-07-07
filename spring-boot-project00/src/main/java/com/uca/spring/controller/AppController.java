@@ -1038,6 +1038,102 @@ public class AppController {
 	      }
 	     
   } 
+  
+  
+  @GetMapping("/activitiesUpdate")
+	public String activitiesUpdate() {
+		return "activitiesUpdate.jsp";
+	}
+
+	//// ACTIONS PARA post mapping (para botones):
+	// -------------------------------------------------------------------------------------------------------------------------
+
+	// Agregar ActividadExtra para EstudianteLogeado
+	@PostMapping("/activitiesUpSuccess")
+	public String activitiesUpSuccess(@RequestParam("nameActivity") String nameActivity, ModelMap modelMap) {
+
+		if (nameActivity.isEmpty()) {
+			modelMap.put("errorU", "No deje espacios en blanco");
+			return "activitiesUpdate.jsp";
+		} else {
+
+			// Lista de tabla Estudiante
+			List<ActividadesExtra> actividades = new ArrayList<ActividadesExtra>();
+			actividadesExtraService.getActividades().forEach(a -> actividades.add(a));
+
+			int lastIdx = actividades.size() - 1;
+			ActividadesExtra lastActividad = actividades.get(lastIdx);
+
+			int idActividadExtra = lastActividad.getIdEstudiante() + 1;
+
+			// Creando ActividadExtra
+			ActividadesExtra newActividad = new ActividadesExtra();
+			newActividad.setIdActividadesExtra(idActividadExtra);
+			newActividad.setIdEstudiante(estudianteLogeado.getIdEstudiante());
+			newActividad.setNombreActividadesExtra(nameActivity);
+			actividadesExtraService.createActividadExtra(newActividad);
+
+			modelMap.put("nombreEstudianteAUS", estudianteEjemplo.getNombreEstudiante());
+			return "activitiesUpSuccess.jsp";
+		}
+
+	}
+
+//Eliminar ActividadExtra para EstudianteLogeado
+	@PostMapping("/activitiesUpSuccess2")
+	public String activitiesUpSuccess2(@RequestParam("nameActivity") String nameActivity, ModelMap modelMap) {
+
+		if (nameActivity.isEmpty()) {
+			modelMap.put("errorU", "No deje espacios en blanco");
+			return "activitiesUpdate.jsp";
+		} else {
+
+			// Lista de tabla
+			List<ActividadesExtra> actividades = new ArrayList<ActividadesExtra>();
+			actividadesExtraService.getActividades().forEach(a -> {
+				if (a.getNombreActividadesExtra().equals(nameActivity)) {
+					actividadesExtraService.deleteActividadExtraById(a.getIdActividadesExtra());
+				}
+				;
+			});
+
+			modelMap.put("nombreEstudianteAUS", estudianteEjemplo.getNombreEstudiante());
+			return "activitiesUpSuccess.jsp";
+		}
+
+	}
+	
+	// para las actividades extracurriculares:
+		@GetMapping("/activities")
+		public String activities(ModelMap modelMap) {
+
+			// Lista de tabla Estudiante
+			List<ActividadesExtra> actividades = new ArrayList<ActividadesExtra>();
+			actividadesExtraService.getActividades().forEach(a -> actividades.add(a));
+
+			// Lista para mostrar en la tabla de ActividadesExtra
+			List<ActividadesExtra> actividadesEstudianteLogeado = new ArrayList<ActividadesExtra>();
+
+			actividades.forEach(a -> {
+				if (a.getIdEstudiante().equals(estudianteLogeado.getIdEstudiante())) {
+					actividadesEstudianteLogeado.add(a);
+
+					// a.getNombreActividadesExtra();
+					// a.getActividadHecha();
+				}
+			});
+
+			if (actividadesEstudianteLogeado.isEmpty()) {
+
+				modelMap.addAttribute("errorAE", "No tiene actividades pendientes");
+				return "activities.jsp";
+			} else {
+				modelMap.addAttribute("actividadesEstudianteLogeado", actividadesEstudianteLogeado);
+				return "activities.jsp";
+			}
+
+		}
+	
 }
   
   
