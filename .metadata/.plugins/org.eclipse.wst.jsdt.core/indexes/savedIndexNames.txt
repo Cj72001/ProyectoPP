@@ -1,7 +1,5 @@
 INDEX VERSION 1.4+C:\Users\Lenovo\Desktop\Omar2023\PP\ProyectoPP\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
 1539621160.index
-3517715062.index
-2864507648.index
 113647544.index
 3941771361.index
 3828150230.index
