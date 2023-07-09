@@ -21,7 +21,7 @@ public class Logs {
 	String fecha;
 	
 	@Column(name="Carnet")
-	String carnet;
+	Integer carnet;
 
 	public Integer getIdCarrera() {
 		return idLog;
@@ -39,11 +39,11 @@ public class Logs {
 		this.fecha = fecha;
 	}
 
-	public String getCarnet() {
+	public Integer getCarnet() {
 		return carnet;
 	}
 
-	public void setCarnet(String cARNET2) {
+	public void setCarnet(Integer cARNET2) {
 		this.carnet = cARNET2;
 	}
 	
