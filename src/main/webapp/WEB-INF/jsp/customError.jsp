@@ -1,7 +1,12 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error</title>
     <style>
         .error-container {
@@ -18,17 +23,16 @@
         }
     </style>
 </head>
+
 <body>
     <div class="error-container">
         <h1>¡Ups! Algo salió mal.</h1>
         <div class="error-message">
-            <% if (request.getAttribute("message") != null) { %>
-                <p><%= request.getAttribute("message") %></p>
-            <% } else { %>
-                <p>Estamos experimentando problemas técnicos. Por favor, intenta de nuevo más tarde.</p>
-            <% } %>
+                <p>${errorGeneral}</p>
         </div>
-        <a href="/" class="back-link">Volver a la página de inicio</a>
+        <a href="${pageContext.request.contextPath}/login">Volver</a>
     </div>
 </body>
 </html>
+
+
