@@ -28,7 +28,9 @@
     <div class="error-container">
         <h1>¡Ups! Algo salió mal.</h1>
         <div class="error-message">
-                <p>${errorGeneral}</p>
+            <h2>Error - Código de Estado: ${statusCode}</h2>
+            <p>Fecha y Hora del Error: ${timestamp}</p>
+            <p>Detalle del Error: ${errorMessage}</p>
         </div>
         <h1>¡VOLVEREMOS PRONTO !</h1>
         <a href="${pageContext.request.contextPath}/login">Volver</a>
