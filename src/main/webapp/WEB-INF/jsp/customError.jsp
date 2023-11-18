@@ -30,6 +30,7 @@
         <div class="error-message">
                 <p>${errorGeneral}</p>
         </div>
+        <h1>¡VOLVEREMOS PRONTO !</h1>
         <a href="${pageContext.request.contextPath}/login">Volver</a>
     </div>
 </body>
