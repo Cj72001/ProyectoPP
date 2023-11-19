@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Controller
 public class GlobalExceptionHandler implements ErrorController {
 
-    @GetMapping("/error")
+    @GetMapping("/errorr")
     public String handleError(ModelMap modelMap, HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         Throwable throwable = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
