@@ -14,7 +14,7 @@
             margin-top: 50px;
         }
         .error-message {
-            color: rgb(88, 2, 2);
+            color: rgb(157, 7, 7);
             font-size: 20px;
         }
         .back-link {
