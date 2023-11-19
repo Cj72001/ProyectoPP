@@ -13,11 +13,13 @@
       window.onload = function() {
           var showMessage = ${showMaintenanceMessage};
           if (showMessage) {
-              alert("${maintenanceMessage}");
+              var maintenanceMessage = "<c:out value='${maintenanceMessage}'/>";
+              alert(maintenanceMessage);
           }
       };
   </script>
   
+
 </head>
 
 <body>
