@@ -14,7 +14,7 @@
             margin-top: 50px;
         }
         .error-message {
-            color: red;
+            color: rgb(88, 2, 2);
             font-size: 20px;
         }
         .back-link {
@@ -26,14 +26,15 @@
 
 <body>
     <div class="error-container">
-        <h1>¡Ups! Algo salió mal.</h1>
+        <h1>Ha ocurrido un error interno en la aplicación</h1>
+        <img  src="<c:url value='/resources/img/mantenimiento.jpg'/>" width="100px"/>
         <div class="error-message">
             <h2>Error - Código de Estado: ${statusCode}</h2>
             <p>Fecha y Hora del Error: ${timestamp}</p>
             <p>Detalle del Error: ${errorMessage}</p>
         </div>
-        <h1>¡VOLVEREMOS PRONTO !</h1>
-        <a href="${pageContext.request.contextPath}/login">Volver</a>
+        <h1>¡Estamos trabajando para resolverlo lo antes posible!</h1>
+        <a href="${pageContext.request.contextPath}/login">Volver al login</a>
     </div>
 </body>
 </html>
