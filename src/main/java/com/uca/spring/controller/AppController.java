@@ -142,7 +142,11 @@ public class AppController {
 
 	// Action que se invoca al iniciar la app en la ruta (/)
 	@GetMapping("/")
-	public String getForm() {
+	public String getForm(Model model) {
+
+		// Agregar información de mantenimiento al modelo
+        model.addAttribute("maintenanceMessage", "Nuestra aplicación estará en mantenimiento el día 25 de marzo de 2023, de 00:00 a 04:00 AM.");
+        model.addAttribute("showMaintenanceMessage", true); // Controlar la visualización
 
 		// seteando y creando actividades para estudiante1
 		actividadExtra1.setIdActividadesExtra(2);

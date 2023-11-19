@@ -8,6 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%@include file="/WEB-INF/jsp/include-css.jsp" %>
     <title>Login</title>
+
+    <script type="text/javascript">
+      window.onload = function() {
+          var showMessage = ${showMaintenanceMessage};
+          if (showMessage) {
+              alert("${maintenanceMessage}");
+          }
+      };
+  </script>
+  
 </head>
 
 <body>
