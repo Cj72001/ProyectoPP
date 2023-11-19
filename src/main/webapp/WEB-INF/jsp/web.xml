@@ -25,7 +25,7 @@
 
     <!-- Error page for any other errors -->
     <error-page>
-        <location>/error.jsp</location>
+        <location>/customError.jsp</location>
     </error-page>
 
 </web-app>
