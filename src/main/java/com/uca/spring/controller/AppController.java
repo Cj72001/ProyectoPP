@@ -34,11 +34,13 @@ import com.uca.spring.model.Estudiante;
 import com.uca.spring.model.Logs;
 import com.uca.spring.model.Materia;
 import com.uca.spring.model.MateriaAprobada;
+import com.uca.spring.model.MensajeMantenimiento;
 import com.uca.spring.service.ActividadesExtraService;
 import com.uca.spring.service.CarreraService;
 import com.uca.spring.service.EstudianteService;
 import com.uca.spring.service.LogsService;
 import com.uca.spring.service.MateriaService;
+import com.uca.spring.service.MensajeMantenimientoService;
 import com.uca.spring.util.Util;
 import com.uca.spring.util.Util2;
 
@@ -59,6 +61,11 @@ public class AppController {
 	MateriaService materiaService;
 	@Autowired
 	LogsService logsService;
+	@Autowired
+	MensajeMantenimientoService mensajeService;
+
+	//Mensaje de mantenimiento inicializacion
+	MensajeMantenimiento mensaje = new MensajeMantenimiento();
 
 	// actividades extras temporales
 	ActividadesExtra actividadExtra1 = new ActividadesExtra();
@@ -144,10 +151,15 @@ public class AppController {
 	@GetMapping("/")
 	public String getForm(Model model) {
 
-		// Agregar información de mantenimiento al modelo
-        model.addAttribute("maintenanceMessage", "Nuestra aplicación estará en mantenimiento el día 25 de marzo de 2023, de 00:00 a 04:00 AM.");
- 		// Controlar la visualización       
-		model.addAttribute("showMaintenanceMessage", true);
+		//creando el mensaje de mantenimiento iniciado en false (no hay mantenimiento programado)
+		mensaje.setIdMensaje(1);
+		mensaje.setDiaInicio("");
+		mensaje.setHoraInicio("");
+		mensaje.setDiaFin("");
+		mensaje.setHoraFin("");
+		mensaje.setMensajeActivo(false);
+		mensajeService.createMensajeMantenimiento(mensaje);
+
 
 		// seteando y creando actividades para estudiante1
 		actividadExtra1.setIdActividadesExtra(2);
@@ -620,7 +632,19 @@ public class AppController {
 
 	// Al volver al login o al deslogearse para que reinicie el estudiante logeado
 	@GetMapping("/login")
-	public String login() {
+	public String login(Model model) {
+
+		MensajeMantenimiento m = mensajeService.getMensajeMantenimientoById(1);
+
+		//Consultando si hay algun mensaje de mantenimiento activo
+		if(m.getMensajeActivo()){
+
+			// Agregar información de mantenimiento al modelo
+        	model.addAttribute("maintenanceMessage", "Nuestra aplicación estará en mantenimiento desde el día "+m.getDiaInicio()+" a las "+m.getHoraInicio()+" hasta "+m.getDiaFin()+" a las "+m.getHoraFin());
+ 			// Controlar la visualización       
+			model.addAttribute("showMaintenanceMessage", true);
+		}
+		
 
 		carreraEstudianteLogeado = null;
 		estudianteLogeado = null;
