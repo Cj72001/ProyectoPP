@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.uca.spring.model.ActividadesExtra;
 import com.uca.spring.model.Carrera;
+import com.uca.spring.model.Comentario;
 import com.uca.spring.model.Estudiante;
 import com.uca.spring.model.Logs;
 import com.uca.spring.model.Materia;
@@ -37,6 +38,7 @@ import com.uca.spring.model.MateriaAprobada;
 import com.uca.spring.model.MensajeMantenimiento;
 import com.uca.spring.service.ActividadesExtraService;
 import com.uca.spring.service.CarreraService;
+import com.uca.spring.service.ComentarioService;
 import com.uca.spring.service.EstudianteService;
 import com.uca.spring.service.LogsService;
 import com.uca.spring.service.MateriaService;
@@ -63,6 +65,8 @@ public class AppController {
 	LogsService logsService;
 	@Autowired
 	MensajeMantenimientoService mensajeService;
+	@Autowired
+	ComentarioService comentarioService;
 
 	//Mensaje de mantenimiento inicializacion
 	MensajeMantenimiento mensaje = new MensajeMantenimiento();
@@ -653,6 +657,12 @@ public class AppController {
 		return "login.jsp";
 	}
 
+	@GetMapping("/sugerencias")
+	public String Sugerencias(ModelMap modelMap) {
+		modelMap.put("idEstudiante", estudianteLogeado.getIdEstudiante());
+		return "sugerencias.jsp";
+	}
+	
 	@GetMapping("/dataUpdate")
 	public String dataUpdate() {
 		return "dataUpdate.jsp";
@@ -728,7 +738,7 @@ public class AppController {
 
 	}
 
-//Eliminar ActividadExtra para EstudianteLogeado
+    //Eliminar ActividadExtra para EstudianteLogeado
 	@PostMapping("/activitiesUpSuccess2")
 	public String activitiesUpSuccess2(@RequestParam("nameActivity") String nameActivity, ModelMap modelMap) {
 
@@ -833,6 +843,25 @@ public class AppController {
 			return "activities.jsp";
 		}
 	}
+	
+	
+	
+	@PostMapping("/addComentario")
+	public String addComentario(@RequestParam("mensaje") String mensaje, ModelMap modelMap){
+		if (mensaje.isEmpty()) {
+			modelMap.put("errorAE", "Favor, rellene el campo");
+			return "sugerencias.jsp";
+		} else {
+			// Agregar un nuevo comentario
+			Comentario newComentario = new Comentario();
+			newComentario.setMensaje(mensaje);
+			newComentario.setIdEstudiante(estudianteLogeado.getIdEstudiante());
+				
+			comentarioService.createComentario(newComentario);
+			return "messegeCommentSuccess.jsp";
+	    }
+	}
+	
 
 	// Action para marcar una materia de "materias habiles" (por medio se su
 	// correlativo) como aprobada

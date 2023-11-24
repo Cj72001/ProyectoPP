@@ -15,7 +15,7 @@
         <img src="<c:url value='/resources/img/success.jpg'/>" width="100px"/>
             <h4>${nombreEstudianteUS}</h4>
             <P>
-                HAS ACTUALIZADO LA MATERIA EXITOSAMENTE
+                Comentario enviado correctamente. ¡Lo tomaremos en cuenta!
             </P>
         </div>
 

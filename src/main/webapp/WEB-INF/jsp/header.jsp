@@ -5,6 +5,7 @@
             <a href="${pageContext.request.contextPath}/availableSubjects">Materias Habiles</a>
             <a href="${pageContext.request.contextPath}/approvedSubjects">Materias Aprobadas</a>
             <a href="${pageContext.request.contextPath}/activities">Actividades</a>
+            <a href="${pageContext.request.contextPath}/sugerencias">Sugerencias</a>
             <a href="${pageContext.request.contextPath}/login">Salir</a>
         </div>
     </header>

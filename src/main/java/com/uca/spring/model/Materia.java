@@ -16,7 +16,6 @@ import lombok.Setter;
 @Setter
 public class Materia {
 	
-	
 	@Id
 	@Column(name="idMateria")
 	Integer idMateria; 
