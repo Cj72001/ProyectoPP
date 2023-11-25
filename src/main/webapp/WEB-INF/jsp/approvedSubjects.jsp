@@ -63,10 +63,9 @@
                         
                     <br> <input class="btn2" type="submit" value="Remover Materia">
                 </div> <!-- End Box --> 
-                </form>
-                
+                </form> 
 
-
+<%@include file="/WEB-INF/jsp/inactivityHandler.jsp" %>
 </body>
 
 </html>

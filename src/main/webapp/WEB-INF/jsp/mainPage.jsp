@@ -83,8 +83,7 @@
 
     </div>
 
-
-
+<%@include file="/WEB-INF/jsp/inactivityHandler.jsp" %>
 </body>
 
 </html>
