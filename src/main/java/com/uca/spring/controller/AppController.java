@@ -469,6 +469,8 @@ public class AppController {
 		public String login(@RequestParam("CARNET") Integer CARNET, @RequestParam("PASSWORD") String PASSWORD,
 				ModelMap modelMap) {
 
+					modelMap.put("errorL", "");
+
 			if (CARNET.toString().isEmpty() || PASSWORD.toString().isEmpty() || CARNET.toString() == null || PASSWORD.toString() == null) {
 				modelMap.put("errorL", "No deje espacios en blanco");
 				return "login.jsp";
@@ -796,7 +798,9 @@ public class AppController {
 
 	// Al volver al login o al deslogearse para que reinicie el estudiante logeado
 	@GetMapping("/login")
-	public String login(Model model) {
+	public String login(Model model, ModelMap modelMap) {
+
+		modelMap.put("errorL", "");
 
 		MensajeMantenimiento m = mensajeService.getMensajeMantenimientoById(1);
 
