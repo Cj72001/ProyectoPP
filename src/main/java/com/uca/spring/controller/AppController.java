@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -864,13 +865,13 @@ public class AppController {
 	}
 	
 	@GetMapping("/inactivity")
-	public void inactivity(ModelMap modelMap, HttpServletResponse response) throws IOException{
+	public void inactivity(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		carreraEstudianteLogeado = null;
 		estudianteLogeado = null;
 		estudianteExiste = false;
 			
-		modelMap.put("errorL", "Sesión expirada. Favor ingrese nuevamente");
+		request.getSession().setAttribute("errorL", "Sesión expirada. Favor ingrese nuevamente");
 		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/login");
 	}
 
