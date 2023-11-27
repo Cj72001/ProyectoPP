@@ -19,7 +19,7 @@
   function handleInactivity() {
        handleInactivityCloseSession();
        alert("Estas inactivo, favor vuelve a ingresar nuevamente");
-       window.location.href = 'https://proyectopp-e23408b6aae3.herokuapp.com/springform/login';
+       //window.location.href = 'https://proyectopp-e23408b6aae3.herokuapp.com/springform/login';
   }   
 
 

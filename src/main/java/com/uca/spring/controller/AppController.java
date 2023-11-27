@@ -869,7 +869,7 @@ public class AppController {
 			
 		//return "inactivityLogin.jsp";
 		modelMap.put("errorL", "Sesión expirada. Favor ingrese nuevamente");
-		return "login.jsp";
+		return "redirect:/login.jsp";
 
 	}
 
