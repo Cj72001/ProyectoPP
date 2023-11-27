@@ -896,7 +896,9 @@ public class AppController {
 		estudianteLogeado = null;
 		estudianteExiste = false;
 			
-		return "inactivityLogin.jsp";
+		//return "inactivityLogin.jsp";
+		return "login.jsp";
+
 	}
 
 
