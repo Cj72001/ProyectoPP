@@ -869,7 +869,7 @@ public class AppController {
 			
 		//return "inactivityLogin.jsp";
 		modelMap.put("errorL", "Sesión expirada. Favor ingrese nuevamente");
-		return "redirect:/login.jsp";
+		return "redirect:https://proyectopp-e23408b6aae3.herokuapp.com/springform/login";
 
 	}
 
