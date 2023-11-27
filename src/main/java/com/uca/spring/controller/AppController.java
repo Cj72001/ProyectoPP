@@ -800,8 +800,6 @@ public class AppController {
 	@GetMapping("/login")
 	public String login(Model model, ModelMap modelMap) {
 
-		modelMap.put("errorL", "");
-
 		MensajeMantenimiento m = mensajeService.getMensajeMantenimientoById(1);
 
 		//Consultando si hay algun mensaje de mantenimiento activo
@@ -875,7 +873,7 @@ public class AppController {
 		estudianteLogeado = null;
 		estudianteExiste = false;
 			
-		request.getSession().setAttribute("errorL", "Sesión expirada. Favor ingrese nuevamente");
+		//request.getSession().setAttribute("errorL", "Sesión expirada. Favor ingrese nuevamente");
 		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/login");
 	}
 
