@@ -1,9 +1,12 @@
 package com.uca.spring.controller;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -861,16 +864,14 @@ public class AppController {
 	}
 	
 	@GetMapping("/inactivity")
-	public String inactivity(ModelMap modelMap) {
+	public void inactivity(ModelMap modelMap, HttpServletResponse response) throws IOException{
 		
 		carreraEstudianteLogeado = null;
 		estudianteLogeado = null;
 		estudianteExiste = false;
 			
-		//return "inactivityLogin.jsp";
 		modelMap.put("errorL", "Sesión expirada. Favor ingrese nuevamente");
-		return "redirect:https://proyectopp-e23408b6aae3.herokuapp.com/springform/login";
-
+		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/login");
 	}
 
 

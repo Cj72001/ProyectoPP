@@ -17,31 +17,19 @@
   resetInactivityTimer();
   
   function handleInactivity() {
-       handleInactivityCloseSession();
-       alert("Estas inactivo, favor vuelve a ingresar nuevamente");
-       //window.location.href = 'https://proyectopp-e23408b6aae3.herokuapp.com/springform/login';
-  }   
-
-
-  function handleInactivityCloseSession() {
-    // Hacer una solicitud Fetch al servidor de Spring Boot
     fetch('https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivity', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-        // Puedes agregar más encabezados según sea necesario
-      },
-      //body: JSON.stringify({}) // Puedes enviar datos en el cuerpo si es necesario
+      method: 'GET'
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al manejar la inactividad en el servidor');
-        }
-        console.log('Inactividad manejada en el servidor');
-        // Puedes realizar más acciones después de manejar la inactividad en el servidor
-      })
-      .catch(error => {
-        console.error('Error al manejar la inactividad en el servidor', error);
-      });
-  }
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al manejar la inactividad en el servidor');
+      }
+      // Redirigir en base a la respuesta del servidor
+      window.location.href = response.url;
+    })
+    .catch(error => {
+      console.error('Error al manejar la inactividad en el servidor', error);
+    });
+}
+
 </script>
