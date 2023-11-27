@@ -648,11 +648,6 @@ public class AppController {
 		modelMap.put("actividadesExtracurricularesEstudiante",
 				carreraEstudianteLogeado.getCantidadActividadesExtracurriculares());
 		return "mainPage.jsp";
-	}else {
-		estudianteLogeado = null;
-		carreraEstudianteLogeado = null;
-		estudianteExiste = false;
-		return "inactivityLogin.jsp";
 	}
 	}
 
@@ -710,11 +705,6 @@ public class AppController {
 
 		}
 		
-		}else {
-			estudianteLogeado = null;
-			carreraEstudianteLogeado = null;
-			estudianteExiste = false;
-			return "inactivityLogin.jsp";
 		}	
 
 	}
@@ -748,11 +738,6 @@ public class AppController {
 			return "activities.jsp";
 		}
 		
-		}else {
-			estudianteLogeado = null;
-			carreraEstudianteLogeado = null;
-			estudianteExiste = false;
-			return "inactivityLogin.jsp";
 		}	
 
 	}
@@ -803,11 +788,6 @@ public class AppController {
 			modelmap.addAttribute("materiasMA", materiasAprobadas);
 			return "approvedSubjects.jsp";
 		}
-		}else {
-			estudianteLogeado = null;
-			carreraEstudianteLogeado = null;
-			estudianteExiste = false;
-			return "inactivityLogin.jsp";
 		}	
 
 	}
@@ -840,11 +820,6 @@ public class AppController {
 		if(estudianteLogeado!=null) {
 		modelMap.put("idEstudiante", estudianteLogeado.getIdEstudiante());
 		return "sugerencias.jsp";
-		}else {
-			carreraEstudianteLogeado = null;
-			estudianteLogeado = null;
-			estudianteExiste = false;
-			return "inactivityLogin.jsp";
 		}
 	}
 	
@@ -897,6 +872,7 @@ public class AppController {
 		estudianteExiste = false;
 			
 		//return "inactivityLogin.jsp";
+		modelMap.put("errorL", "Sesión expirada. Favor ingrese nuevamente");
 		return "login.jsp";
 
 	}
