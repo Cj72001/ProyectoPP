@@ -136,14 +136,16 @@ public class AppController {
 	@GetMapping("/")
 	public String getForm(Model model) {
 
+		MensajeMantenimiento mensaje = new MensajeMantenimiento();
+
 		//creando el mensaje de mantenimiento iniciado en false (no hay mantenimiento programado)
-		/*mensaje.setIdMensaje(1);
+		mensaje.setIdMensaje(1);
 		mensaje.setDiaInicio("");
 		mensaje.setHoraInicio("");
 		mensaje.setDiaFin("");
 		mensaje.setHoraFin("");
 		mensaje.setMensajeActivo(false);
-		mensajeService.createMensajeMantenimiento(mensaje); */
+		mensajeService.createMensajeMantenimiento(mensaje);
 
 
 		// Seteando atributos para estudianteOmar
