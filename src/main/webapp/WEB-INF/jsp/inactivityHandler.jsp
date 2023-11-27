@@ -24,7 +24,7 @@
 
   function handleInactivityCloseSession() {
     // Hacer una solicitud Fetch al servidor de Spring Boot
-    fetch('http://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivity', {
+    fetch('https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivity', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
