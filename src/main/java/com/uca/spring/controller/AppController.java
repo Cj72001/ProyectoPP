@@ -629,7 +629,7 @@ public class AppController {
 	// Para menu:
 	@GetMapping("/mainPage")
 	public String mainPage(ModelMap modelMap) {
-		if(estudianteLogeado != null) {
+		
 		// Lista de tabla Estudiante
 		List<Estudiante> estudiantes = new ArrayList<Estudiante>();
 		estudianteService.getEstudiantes().forEach(e -> estudiantes.add(e));
@@ -648,13 +648,13 @@ public class AppController {
 		modelMap.put("actividadesExtracurricularesEstudiante",
 				carreraEstudianteLogeado.getCantidadActividadesExtracurriculares());
 		return "mainPage.jsp";
-	}
+	
 	}
 
 	// Para las materias habiles:
 	@GetMapping("/availableSubjects")
 	public String availableSubjects(ModelMap modelmap) {
-		if(estudianteLogeado!=null) {
+		
 		// Separa las el id de las materias aprobadas que tiene el estudiante en la
 		// tabla carrera
 		// y busca las materias en la tabla Materia y las agrega a la lista materias
@@ -705,14 +705,14 @@ public class AppController {
 
 		}
 		
-		}	
+		
 
 	}
 
 	// para las actividades extracurriculares:
 	@GetMapping("/activities")
 	public String activities(ModelMap modelMap) {
-		if(estudianteLogeado!=null) {
+		
 		// Lista de tabla Estudiante
 		List<ActividadesExtra> actividades = new ArrayList<ActividadesExtra>();
 		actividadesExtraService.getActividades().forEach(a -> actividades.add(a));
@@ -738,15 +738,12 @@ public class AppController {
 			return "activities.jsp";
 		}
 		
-		}	
 
 	}
 
 	// Para las materias aprovadas:
 	@GetMapping("/approvedSubjects")
 	public String approvedSubjects(ModelMap modelmap) {
-		if(estudianteLogeado!=null) {
-
 		// Separa las el id de las materias aprobadas que tiene el estudiante en la
 		// tabla carrera
 		// y busca las materias en la tabla Materia y las agrega a la lista materias
@@ -788,7 +785,6 @@ public class AppController {
 			modelmap.addAttribute("materiasMA", materiasAprobadas);
 			return "approvedSubjects.jsp";
 		}
-		}	
 
 	}
 
@@ -817,10 +813,8 @@ public class AppController {
 
 	@GetMapping("/sugerencias")
 	public String Sugerencias(ModelMap modelMap) {
-		if(estudianteLogeado!=null) {
 		modelMap.put("idEstudiante", estudianteLogeado.getIdEstudiante());
 		return "sugerencias.jsp";
-		}
 	}
 	
 	@GetMapping("/dataUpdate")
