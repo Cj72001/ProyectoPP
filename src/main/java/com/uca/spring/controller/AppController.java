@@ -874,7 +874,14 @@ public class AppController {
 		estudianteExiste = false;
 			
 		//request.getSession().setAttribute("errorL", "Sesión expirada. Favor ingrese nuevamente");
-		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/login");
+		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivityLogin");
+		//response.sendRedirect("http://localhost:8080/springform/inactivityLogin");
+	}
+	
+	
+	@GetMapping("/inactivityLogin")
+	public String inactivityLogin() {
+		return "inactivityLogin.jsp";
 	}
 
 
