@@ -27,7 +27,6 @@
                 
             </div>
             <div class="porcentaje-carrera">
-				<b>${porcentajeDeCarrera}</b>
             </div>
            <div>
             <img src="<c:url value='/resources/img/logoUca.jpg'/>" width="20%"/>

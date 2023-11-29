@@ -649,12 +649,10 @@ public class AppController {
 				carreraEstudianteLogeado = carreraService.getCarreraById(e.getIdEstudiante());
 			}
 		});
-		double porcentajeCarrera = 3.14159;
 
 		// menu atributos sobre la carrera del estudiante:
 		modelMap.put("nombreEstudiante", estudianteLogeado.getNombreEstudiante());
 		modelMap.put("numeroMateriasAprobadasEstudiante", carreraEstudianteLogeado.getCantidadMateriasAprobadas());
-		modelMap.put("porcentajeDeCarrera", porcentajeCarrera);
 		modelMap.put("materiasDisponiblesEstudiante", carreraEstudianteLogeado.getCantidadMateriasPosibles());
 		modelMap.put("actividadesExtracurricularesEstudiante",
 				carreraEstudianteLogeado.getCantidadActividadesExtracurriculares());
@@ -876,9 +874,7 @@ public class AppController {
 		estudianteLogeado = null;
 		estudianteExiste = false;
 			
-		//request.getSession().setAttribute("errorL", "Sesión expirada. Favor ingrese nuevamente");
 		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivityLogin");
-		//response.sendRedirect("http://localhost:8080/springform/inactivityLogin");
 	}
 	
 	

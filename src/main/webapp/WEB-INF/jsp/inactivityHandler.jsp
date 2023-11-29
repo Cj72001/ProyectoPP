@@ -18,7 +18,6 @@
   
   function handleInactivity() {
    fetch('https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivity', {
-    //fetch('http://localhost:8080/springform/inactivity', {
       method: 'GET'
     })
     .then(response => {
