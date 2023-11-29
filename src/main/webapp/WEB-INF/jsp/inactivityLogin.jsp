@@ -3,55 +3,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%@include file="/WEB-INF/jsp/include-css.jsp" %>
-    <title>Login</title>
-
-    <script type="text/javascript">
-      window.onload = function() {
-          var showMessage = ${showMaintenanceMessage};
-          if (showMessage) {
-              var maintenanceMessage = "<c:out value='${maintenanceMessage}'/>";
-              alert(maintenanceMessage);
-          }
-      };
-  </script>
-
-
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%@include file="/WEB-INF/jsp/include-css.jsp" %>
+<title>Login</title>
 </head>
-
 <body>
-  <div class="main">
-
-    <form method="post" action="loginn">
-      <img  src="<c:url value='/resources/img/login.jpg'/>" width="100px"/>
-      <div class="box">
+<div class="main">
+   <div class="signin"> 
+      <form method="post" action="loginn">
+        <img  src="<c:url value='/resources/img/login.jpg'/>" width="100px"/>
+        <h1> Iniciar sesión</h1>
         <p>Sesión expirada. Favor vuelva a ingresar</p>
-        <input type="carnet" name="CARNET" placeholder="Carnet" onFocus="field_focus(this, 'carnet');" onblur="field_blur(this, 'carnet');" class="carnet" />
-        <input type="password" name="PASSWORD" placeholder="Contraseña" onFocus="field_focus(this, 'password');" onblur="field_blur(this, 'password');" class="carnet" />
+        <div class="box">
+          <input type="carnet" name="CARNET" placeholder="Carnet" onFocus="field_focus(this, 'carnet');" onblur="field_blur(this, 'carnet');" class="carnet" />
+          <input type="password" name="PASSWORD" placeholder="Contraseña" onFocus="field_focus(this, 'password');" onblur="field_blur(this, 'password');" class="carnet" />
+        </div>
+        <h3>${errorL}</h3>   
+        <br> <input class="btn4" type="submit" value="ENTRAR">
+      </form> 
+      <div class="booter">
+        <a href="${pageContext.request.contextPath}/register">Crear una nueva cuenta</a>
       </div>
-
-      <h3>${errorL}</h3>
-
-      <!-- Agregarle stilo a estos botones -->
-
-      <br> <input class="btn4" type="submit" value="ENTRAR">
-
-    </form>
-
-    <div>
       <div>
         <a href="${pageContext.request.contextPath}/recoveryPasword">Recuperar contraseña</a>
       </div>
-      <div>
-        <a href="${pageContext.request.contextPath}/register">Registrarse</a>
-      </div>
-
-  </div>
-
-  </div>
-
+    </div>
+    <div class="signin-img">
+      <img  src="<c:url value='/resources/img/signin-image.jpg'/>" width="277px"/>
+    </div>
+</div>
 </body>
 </html>

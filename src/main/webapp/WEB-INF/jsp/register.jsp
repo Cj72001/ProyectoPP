@@ -10,29 +10,33 @@
     <title>Registro</title>
 </head>
 <body>
-    <div class="main">
-
-        <form method="post" action="registrarEstudiante">
+<div class="main">
+    <div class="signin"> 
+      <form method="post" action="registrarEstudiante">
         <img  src="<c:url value='/resources/img/login.jpg'/>" width="100px"/>
-            <div class="box">
+        <h1> Registrarse </h1>
+        <div class="box">
                 <input type="text" name="nombreRe" placeholder="Nombre Completo" onFocus="field_focus(this, 'nombre');"
                     onblur="field_blur(this, 'nombre');" class="carnet" />
                 <input type="carnet" name="carnetRe" placeholder="Carnet" onFocus="field_focus(this, 'carnet');"
                     onblur="field_blur(this, 'carnet');" class="carnet" />
+               <input type="correo" name="correoRe" placeholder="Correo" onFocus="field_focus(this, 'carnet');"
+                    onblur="field_blur(this, 'correo');" class="carnet" />
                 <input type="password" name="passwordRe" placeholder="Contraseña" onFocus="field_focus(this, 'password');"
                     onblur="field_blur(this, 'password');" class="carnet" /> 
                 <input type="password" name="passwordRe2" placeholder="Repita Contraseña" onFocus="field_focus(this, 'password');"
                     onblur="field_blur(this, 'password');" class="carnet" /> 
-            <h3>${errorRe}</h3>
-            </div> <!-- End Box -->
-            <br> <input class="btn4" type="submit" value="REGISTRARSE">
-        </form>
-
-        <div class="padding">
-        <a href="${pageContext.request.contextPath}/login">Login</a>
+        </div> <!-- End Box -->
+        <h3>${errorRe}</h3>   
+        <br> <input class="btn4" type="submit" value="REGISTRARSE">
+      </form> 
+      <div class="booter">
+        <a href="${pageContext.request.contextPath}/">Realmente ya tengo una cuenta</a>
       </div>
-
     </div>
-
+    <div class="signin-img">
+      <img  src="<c:url value='/resources/img/signup-image.jpg'/>" width="277px"/>
+    </div>
+</div>    
 </body>
 </html>
