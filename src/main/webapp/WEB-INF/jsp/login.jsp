@@ -10,6 +10,16 @@
     <%@include file="/WEB-INF/jsp/include-css.jsp" %>
     <title>Login</title>
 
+    <script type="text/javascript">
+      window.onload = function() {
+          var showMessage = ${showMaintenanceMessage};
+          if (showMessage) {
+              var maintenanceMessage = "<c:out value='${maintenanceMessage}'/>";
+              alert(maintenanceMessage);
+          }
+      };
+  </script>
+
 </head>
 <body>
 <div class="main">
