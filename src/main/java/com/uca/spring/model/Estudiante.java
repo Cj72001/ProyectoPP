@@ -17,13 +17,15 @@ import lombok.Setter;
 @Setter
 public class Estudiante {
 	
-	
 	@Id
 	@Column(name="idEstudiante")
 	Integer idEstudiante; 
 	
 	@Column(name="Carnet")
-	Integer carnetEstudiante; 
+	String carnetEstudiante; 
+	
+	@Column(name="Correo")
+	String correoEstudiante; 
 	
 	@Column(name="Nombre")
 	String nombreEstudiante;
@@ -42,11 +44,11 @@ public class Estudiante {
 		this.idEstudiante = idEstudiante;
 	}
 
-	public Integer getCarnetEstudiante() {
+	public String getCarnetEstudiante() {
 		return carnetEstudiante;
 	}
 
-	public void setCarnetEstudiante(Integer carnetEstudiante) {
+	public void setCarnetEstudiante(String carnetEstudiante) {
 		this.carnetEstudiante = carnetEstudiante;
 	}
 
@@ -56,6 +58,14 @@ public class Estudiante {
 
 	public void setNombreEstudiante(String nombreEstudiante) {
 		this.nombreEstudiante = nombreEstudiante;
+	}
+	
+	public String getCorreoEstudiante() {
+		return correoEstudiante;
+	}
+
+	public void setCorreoEstudiante(String correoEstudiante) {
+		this.correoEstudiante = correoEstudiante;
 	}
 
 	public String getContrasenaEstudiante() {

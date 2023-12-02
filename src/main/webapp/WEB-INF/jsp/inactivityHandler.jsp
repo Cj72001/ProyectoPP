@@ -17,7 +17,7 @@
   resetInactivityTimer();
   
   function handleInactivity() {
-    fetch('https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivity', {
+   fetch('https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivity', {
       method: 'GET'
     })
     .then(response => {
@@ -26,7 +26,6 @@
       }
       // Redirigir en base a la respuesta del servidor
       window.location.href = response.url;
-      alert("Sesion expirada. Por favor ingresa nuevamente.")
     })
     .catch(error => {
       console.error('Error al manejar la inactividad en el servidor', error);

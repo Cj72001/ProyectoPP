@@ -13,30 +13,31 @@
 </head>
 
 <body>
-    <div class="main">
-
-        <form method="post" action="actualizarContrasena">
+<div class="main">
+   <div class="signin"> 
+      <form method="post" action="actualizarContrasena">
         <img  src="<c:url value='/resources/img/login.jpg'/>" width="100px"/>
-            <div class="box">
-                <input type="text" name="nombrePR" placeholder="Nombre Completo" onFocus="field_focus(this, 'nombre');"
+        <h1> Recuperar contraseña </h1>
+        <p> Ingrese datos de su cuenta y su nueva contraseña </p>
+        <div class="box">
+          <input type="text" name="nombrePR" placeholder="Nombre Completo" onFocus="field_focus(this, 'nombre');"
                     onblur="field_blur(this, 'nombre');" class="carnet" />
                 <input type="carnet" name="carnetPR" placeholder="Carnet" onFocus="field_focus(this, 'carnet');"
                     onblur="field_blur(this, 'carnet');" class="carnet" />
                 <input type="password" name="passwordPR" placeholder="Nueva Contraseña" onFocus="field_focus(this, 'password');"
                     onblur="field_blur(this, 'password');" class="carnet" /> 
-                    <h3>${errorPR}</h3>
-            </div> <!-- End Box -->
-            <br> <input class="btn4" type="submit" value="ACTUALIZAR CONTRASENA">
-            
-        </form>
-        
-      <div>
-        <a href="${pageContext.request.contextPath}/login">Login</a>
+        </div>
+        <h3>${errorPR}</h3> 
+        <br> <input class="btn4" type="submit" value="ACTUALIZAR CONTRASENA">
+      </form> 
+      <div class="booter">
+        <a href="${pageContext.request.contextPath}/">Regresar al login</a>
       </div>
-	  
-
     </div>
-
+    <div class="signin-img">
+      <img  src="<c:url value='/resources/img/RecoverPasswd.png'/>" width="277px"/>
+    </div>
+</div>
 </body>
 
 </html>

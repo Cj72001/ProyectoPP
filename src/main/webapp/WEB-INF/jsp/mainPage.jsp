@@ -26,13 +26,12 @@
                 </a>
                 
             </div>
-            <div>
-
+            <div class="porcentaje-carrera">
             </div>
-            <div>
+           <div>
             <img src="<c:url value='/resources/img/logoUca.jpg'/>" width="20%"/>
 
-            </div>
+           </div>
         </div>
 
         <div class="flex-container2">

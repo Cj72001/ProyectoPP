@@ -153,9 +153,10 @@ public class AppController {
 
 
 		// Seteando atributos para estudianteOmar
-		estudianteOmar.setCarnetEstudiante(38619);
 		estudianteOmar.setIdEstudiante(1);
+		estudianteOmar.setCarnetEstudiante("00038619");
 		estudianteOmar.setNombreEstudiante("Omar Flores Alas");
+		estudianteOmar.setCorreoEstudiante("00038619@uca.edu.sv");
 		estudianteOmar.setContrasenaEstudiante("123");
 		estudianteOmar.setCarreraEstudiante(1);
 		estudianteService.createEstudiante(estudianteOmar);
@@ -466,7 +467,7 @@ public class AppController {
 	
 	// para loggearse: Accion al dar click en el botón entrar
 		@PostMapping("/loginn")
-		public String login(@RequestParam("CARNET") Integer CARNET, @RequestParam("PASSWORD") String PASSWORD,
+		public String login(@RequestParam("CARNET") String CARNET, @RequestParam("PASSWORD") String PASSWORD,
 				ModelMap modelMap) {
 
 					modelMap.put("errorL", "");
@@ -544,19 +545,19 @@ public class AppController {
 		// para registrar estudiante
 		@PostMapping("/registrarEstudiante")
 		public String registrarEstudiante(@RequestParam("nombreRe") String nombreRe,
-				@RequestParam("carnetRe") String carnetRe, @RequestParam("passwordRe") String passwordRe,
+				@RequestParam("carnetRe") String carnetRe, @RequestParam("correoRe") String correo, @RequestParam("passwordRe") String passwordRe,
 				@RequestParam("passwordRe2") String passwordRe2, ModelMap modelMap) {
 
 			if (nombreRe.isEmpty() || carnetRe.isEmpty() || passwordRe.isEmpty() || passwordRe.isEmpty()) {
 				// Se actualizo la contrasena
-
 				modelMap.put("errorRe", "No deje espacios en blanco");
 				return "register.jsp";
 			} else {
 
 				Estudiante newEstudiante = new Estudiante();
 				newEstudiante.setNombreEstudiante(nombreRe);
-				newEstudiante.setCarnetEstudiante(Integer.parseInt(carnetRe));
+				newEstudiante.setCarnetEstudiante(carnetRe);
+				newEstudiante.setCorreoEstudiante(correo);
 				newEstudiante.setContrasenaEstudiante(passwordRe2);
 
 				// id autoincrementable:
@@ -873,8 +874,25 @@ public class AppController {
 		estudianteLogeado = null;
 		estudianteExiste = false;
 			
-		//request.getSession().setAttribute("errorL", "Sesión expirada. Favor ingrese nuevamente");
-		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/login");
+		response.sendRedirect("https://proyectopp-e23408b6aae3.herokuapp.com/springform/inactivityLogin");
+	}
+	
+	
+	@GetMapping("/inactivityLogin")
+	public String inactivityLogin(Model model) {
+		MensajeMantenimiento m = mensajeService.getMensajeMantenimientoById(1);
+
+		//Consultando si hay algun mensaje de mantenimiento activo
+		if(m.getMensajeActivo()){
+
+			// Agregar información de mantenimiento al modelo
+        	model.addAttribute("maintenanceMessage", "Nuestra aplicación estará en mantenimiento desde el día "+m.getDiaInicio()+" a las "+m.getHoraInicio()+" hasta "+m.getDiaFin()+" a las "+m.getHoraFin());
+ 			// Controlar la visualización       
+			model.addAttribute("showMaintenanceMessage", true);
+		}
+		
+
+		return "inactivityLogin.jsp";
 	}
 
 
