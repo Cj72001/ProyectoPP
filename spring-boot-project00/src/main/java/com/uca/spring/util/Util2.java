@@ -72,7 +72,7 @@ public class Util2 {
 		esRecomendada = false;
 		notaMinima = 7.0;
 
-		// Agregar instancias de ejemplo
+		// Setear instancias de ejemplo
 		instancia1.setValue(atributos[0], 8.5);
 		instancia1.setValue(atributos[1], "Recomendado");
 		dataset.add(instancia1);
