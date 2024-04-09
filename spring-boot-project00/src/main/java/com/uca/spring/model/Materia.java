@@ -1,77 +1,30 @@
 package com.uca.spring.model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Materia")
-
-//Verificar la generacion de los getters y setters, lombok
 @Getter
 @Setter
+@Table(name = "Materia")
+
 public class Materia {
-	
-	
 	@Id
-	@Column(name="idMateria")
+	@Column(name="id_materia")
 	Integer idMateria; 
 	
-	@Column(name="NombreMateria")
+	@Column(name="nombre_materia")
 	String nombreMateria;
 	
-	@Column(name="UV")
+	@Column(name="uv")
 	Integer uv;
 	
-	@Column(name="Prerrequisito")
+	@Column(name="prerrequisito")
 	String preRequisito;
 	
-	@Column(name="Categoria")
+	@Column(name="categoria")
 	String categoria;
-
-	public Integer getIdMateria() {
-		return idMateria;
-	}
-
-	public void setIdMateria(Integer idMateria) {
-		this.idMateria = idMateria;
-	}
-
-	public String getNombreMateria() {
-		return nombreMateria;
-	}
-
-	public void setNombreMateria(String nombreMateria) {
-		this.nombreMateria = nombreMateria;
-	}
-
-	public Integer getUv() {
-		return uv;
-	}
-
-	public void setUv(Integer uv) {
-		this.uv = uv;
-	}
-
-	public String getPreRequisito() {
-		return preRequisito;
-	}
-
-	public void setPreRequisito(String preRequisito) {
-		this.preRequisito = preRequisito;
-	}
-	
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	
 }

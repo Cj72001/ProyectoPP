@@ -1,51 +1,29 @@
 package com.uca.spring.model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "Logs")
 
 public class Logs {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="idLog")
+	@Column(name="id_log")
 	Integer idLog;
 	
-	@Column(name="Fecha")
+	@Column(name="fecha")
 	String fecha;
 	
-	@Column(name="Carnet")
+	@Column(name="carnet")
 	Integer carnet;
 
-	public Integer getIdCarrera() {
-		return idLog;
-	}
-
-	public void setIdCarrera(Integer idCarrera) {
-		this.idLog = idCarrera;
-	}
-
-	public String getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(String fecha) {
-		this.fecha = fecha;
-	}
-
-	public Integer getCarnet() {
-		return carnet;
-	}
-
-	public void setCarnet(Integer cARNET2) {
-		this.carnet = cARNET2;
-	}
-	
-	
 }

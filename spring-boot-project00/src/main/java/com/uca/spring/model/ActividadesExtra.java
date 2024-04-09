@@ -1,23 +1,20 @@
 package com.uca.spring.model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ActividadesExtra")
-//Verificar la generacion de los getters y setters, lombok
 @Getter
 @Setter
+@Table(name = "ActividadesExtra")
+
 public class ActividadesExtra {
-	
-	
+
 	@Id
-	@Column(name="idActividadesExtra")
+	@Column(name="id_actividad_extra")
 	Integer idActividadesExtra; 
 	
 	@Column(name="Nombre")
@@ -26,30 +23,4 @@ public class ActividadesExtra {
 	@Column(name="idEstudiante")
 	Integer idEstudiante;
 
-	public Integer getIdActividadesExtra() {
-		return idActividadesExtra;
-	}
-
-	public void setIdActividadesExtra(Integer idActividadesExtra) {
-		this.idActividadesExtra = idActividadesExtra;
-	}
-
-	public String getNombreActividadesExtra() {
-		return nombreActividadesExtra;
-	}
-
-	public void setNombreActividadesExtra(String nombreActividadesExtra) {
-		this.nombreActividadesExtra = nombreActividadesExtra;
-	}
-
-	public Integer getIdEstudiante() {
-		return idEstudiante;
-	}
-
-	public void setIdEstudiante(Integer idEstudiante) {
-		this.idEstudiante = idEstudiante;
-	}
-	
-	
-	
 }

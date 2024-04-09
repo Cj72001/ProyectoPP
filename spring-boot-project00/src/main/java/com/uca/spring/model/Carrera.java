@@ -1,113 +1,41 @@
 package com.uca.spring.model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Carrera")
-
-//Verificar la generacion de los getters y setters, lombok
 @Getter
 @Setter
+	@Table(name = "Carrera")
 
 public class Carrera {
 	
 	@Id
-	@Column(name="idCarrera")
+	@Column(name="id_carrera")
 	Integer idCarrera;
 	
-	@Column(name="UVaprobadas")
+	@Column(name="uv_aprobadas")
 	Integer uvAprobadas;
 	
-	@Column(name="CantidadMateriasAprobadas")
+	@Column(name="cantidad_materias_aprobadas")
 	Integer cantidadMateriasAprobadas;
 	
-	@Column(name="MateriasAprobadas")
+	@Column(name="materias_aprobadas")
 	String materiasAprobadas;
 	
-	@Column(name="CantidadMateriasPosibles")
+	@Column(name="cantidad_materias_posibles")
 	Integer cantidadMateriasPosibles;
 	
-	@Column(name="MateriasPosibles")
+	@Column(name="materias_posibles")
 	String materiasPosibles;
 	
-	@Column(name="CantidadActividadesExtracurriculares")
+	@Column(name="cantidad_actividades_extra")
 	Integer cantidadActividadesExtracurriculares;
 	
-	@Column(name="NotaAprobada")
+	@Column(name="nota_aprobada")
 	String notaAprobada;
-
-	public Integer getIdCarrera() {
-		return idCarrera;
-	}
-
-	public void setIdCarrera(Integer idCarrera) {
-		this.idCarrera = idCarrera;
-	}
-
-	public Integer getUvAprobadas() {
-		return uvAprobadas;
-	}
-
-	public void setUvAprobadas(Integer uvAprobadas) {
-		this.uvAprobadas = uvAprobadas;
-	}
-
-	public Integer getCantidadMateriasAprobadas() {
-		return cantidadMateriasAprobadas;
-	}
-
-	public void setCantidadMateriasAprobadas(Integer cantidadMateriasAprobadas) {
-		this.cantidadMateriasAprobadas = cantidadMateriasAprobadas;
-	}
-
-	public String getNotaAprobada() {
-		return notaAprobada;
-	}
-
-	public void setNotaAprobada(String nota) {
-		this.notaAprobada = nota;
-	}
-
-	public Integer getCantidadMateriasPosibles() {
-		return cantidadMateriasPosibles;
-	}
-
-	public void setCantidadMateriasPosibles(Integer cantidadMateriasPosibles) {
-		this.cantidadMateriasPosibles = cantidadMateriasPosibles;
-	}
-
-	public String getMateriasPosibles() {
-		return materiasPosibles;
-	}
-
-	public void setMateriasPosibles(String materiasPosibles) {
-		this.materiasPosibles = materiasPosibles;
-	}
-
-	public Integer getCantidadActividadesExtracurriculares() {
-		return cantidadActividadesExtracurriculares;
-	}
-
-	public void setCantidadActividadesExtracurriculares(Integer cantidadActividadesExtracurriculares) {
-		this.cantidadActividadesExtracurriculares = cantidadActividadesExtracurriculares;
-	}
-
-	public String getMateriasAprobadas() {
-		return materiasAprobadas;
-	}
-
-	public void setMateriasAprobadas(String materiasAprobadas) {
-		this.materiasAprobadas = materiasAprobadas;
-	}
-	
-	
-	
 	
 }
