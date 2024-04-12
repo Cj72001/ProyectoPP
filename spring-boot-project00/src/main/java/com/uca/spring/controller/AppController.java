@@ -2,32 +2,20 @@ package com.uca.spring.controller;
 
 //
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.poi.EncryptedDocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties.Request;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.uca.spring.model.ActividadesExtra;
 import com.uca.spring.model.Carrera;
 import com.uca.spring.model.Estudiante;
@@ -41,8 +29,6 @@ import com.uca.spring.service.LogsService;
 import com.uca.spring.service.MateriaService;
 import com.uca.spring.util.Util;
 import com.uca.spring.util.Util2;
-
-import javassist.expr.NewArray;
 
 @Controller
 @RequestMapping("/")
@@ -186,13 +172,13 @@ public class AppController {
 		materiaEstudianteEjemplo0.setUv(0);
 		materiaEstudianteEjemplo0.setPreRequisito("0");
 		materiaService.createMateria(materiaEstudianteEjemplo0);
-
+		
 		materiaEstudianteEjemplo1.setNombreMateria("Precálculo");
 		materiaEstudianteEjemplo1.setIdMateria(1);
 		materiaEstudianteEjemplo1.setUv(4);
 		materiaEstudianteEjemplo1.setPreRequisito("0");
 		materiaService.createMateria(materiaEstudianteEjemplo1);
-
+		
 		materiaEstudianteEjemplo2.setNombreMateria("Optativa Técnica I");
 		materiaEstudianteEjemplo2.setIdMateria(2);
 		materiaEstudianteEjemplo2.setUv(3);
@@ -204,7 +190,7 @@ public class AppController {
 		materiaEstudianteEjemplo3.setUv(3);
 		materiaEstudianteEjemplo3.setPreRequisito("0");
 		materiaService.createMateria(materiaEstudianteEjemplo3);
-
+		
 		materiaEstudianteEjemplo4.setNombreMateria("Fundamentos de Programación");
 		materiaEstudianteEjemplo4.setIdMateria(4);
 		materiaEstudianteEjemplo4.setUv(4);
@@ -620,6 +606,15 @@ public class AppController {
 		carreraEstudianteLogeado = null;
 		estudianteLogeado = null;
 		estudianteExiste = false;
+
+		try {
+			System.out.println(Util.getNotasExcel("C:\\Users\\omarf\\Downloads\\notas.xlsx"));
+		} catch (EncryptedDocumentException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 
 		return "login.jsp";
 	}
