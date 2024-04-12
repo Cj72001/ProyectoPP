@@ -112,7 +112,7 @@ public class Util {
 
     Row row = sheet.getRow(rowPos);
 
-	//En el siguiente map se almacenaran (codigo, nota)
+	//En el siguiente map se almacenaran (numeroCorrelativo, nota)
 	HashMap<String, String> notasExcel = new HashMap<>();
 
       while(rowPos != rowLimit){
@@ -123,8 +123,7 @@ public class Util {
 		String notaMateriaValue = notaMateriaCell.toString();
 		
 		   if(!(notaMateriaValue == "")){
-			Integer numeroCorrelativo = getCorrelativoByCodigo(codigoMateriaValue);
-			notasExcel.put( numeroCorrelativo.toString(), notaMateriaValue);
+			notasExcel.put( getCorrelativoByCodigo(codigoMateriaValue).toString(), notaMateriaValue);
 		   }
           
           rowPos++;  
@@ -135,7 +134,7 @@ public class Util {
 	}
 
 
-	public static int getCorrelativoByCodigo(String codigo){
+	public static Integer getCorrelativoByCodigo(String codigo){
 		
 		//Diccionario donde se relacionara (numeroCorrelativo, codigo)
 

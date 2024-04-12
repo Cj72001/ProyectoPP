@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -122,6 +123,9 @@ public class AppController {
 	boolean materiaPosible = false;
 	String nuevasMateriasPosibles = "";
 	String nuevasMateriasAprobadas = "";
+	HashMap<String, String> notasExcel = new HashMap<>();
+	List<String> prerrequisitosSinAprobadas;
+	String nuevasNotasAprobadas = "0";
 
 	//// ACTIONS PARA RUTAS (para cargar jsp):
 	// -------------------------------------------------------------------------------------------------------------------------
@@ -437,6 +441,15 @@ public class AppController {
 		materiaEstudianteEjemplo44.setPreRequisito("40");
 		materiaService.createMateria(materiaEstudianteEjemplo44);
 
+
+		try {
+			notasExcel = Util.getNotasExcel("C:\\Users\\omarf\\Downloads\\notas2.xlsx");
+			
+		} catch (EncryptedDocumentException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return "login.jsp";
 	}
 
@@ -561,15 +574,23 @@ public class AppController {
 		// para mostrarlas
 		List<Materia> materiasMA = new ArrayList<Materia>();
 
-		String materiasAprobadasEstudiante = carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
+		String materiasAprobadasIdsEstudiante = carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
 				.getMateriasAprobadas();
-		String[] split = materiasAprobadasEstudiante.split(",");
+		String[] split = materiasAprobadasIdsEstudiante.split(",");
 
 		for (int i = 0; i < split.length; i++) {
+
+			//TODO: ARREGLAR CUANDO EL ID SEA -1
+			//
+			//
+			if(split[i].equals("-1")){
+				materiasMA.add(new Materia());
+				continue;
+			}
 			materiasMA.add(materiaService.getMateriaById(Integer.parseInt(split[i])));
 		}
 		
-		List<MateriaAprobada> materiasAprobadas = new ArrayList<MateriaAprobada>();
+		List<MateriaAprobada> materiasAprobadasIds = new ArrayList<MateriaAprobada>();
 		int sizeMA = materiasMA.size();
 		
 		String[] split2 = carreraService.getCarreraById(estudianteLogeado.getIdEstudiante()).getNotaAprobada().split(",");
@@ -583,17 +604,17 @@ public class AppController {
 			ma.setPreRequisito(materiasMA.get(i).getPreRequisito());
 			ma.setNota(split2[i]);
 			
-			materiasAprobadas.add(ma);
+			materiasAprobadasIds.add(ma);
 		}
 
 		materiasMA.remove(null);
-		materiasAprobadas.remove(null);
+		materiasAprobadasIds.remove(null);
 
 		if (materiasMA.isEmpty()) {
 			modelmap.addAttribute("errorMA", "En este momento no tienes materias aprobadas");
 			return "approvedSubjects.jsp";
 		} else {
-			modelmap.addAttribute("materiasMA", materiasAprobadas);
+			modelmap.addAttribute("materiasMA", materiasAprobadasIds);
 			return "approvedSubjects.jsp";
 		}
 
@@ -601,17 +622,15 @@ public class AppController {
 
 	// Al volver al login o al deslogearse para que reinicie el estudiante logeado
 	@GetMapping("/login")
-	public String login() {
+	public String login() throws IOException {
 
 		carreraEstudianteLogeado = null;
 		estudianteLogeado = null;
 		estudianteExiste = false;
 
 		try {
-			System.out.println(Util.getNotasExcel("C:\\Users\\omarf\\Downloads\\notas.xlsx"));
+			System.out.println(notasExcel);
 		} catch (EncryptedDocumentException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -823,28 +842,28 @@ public class AppController {
 		} else {
 
 			// POSIBLES MATERIAS DEL ESTUDIANTE LOGEADO:
-			List<String> materias0 = new ArrayList<String>();
+			List<String> materiasPosiblesIds = new ArrayList<String>();
 
-			String materiasPosiblesEstudianteLogeado = carreraService
+			String materiasPosiblesIdsEstudianteLogeado = carreraService
 					.getCarreraById(estudianteLogeado.getIdEstudiante()).getMateriasPosibles();
-			String[] split = materiasPosiblesEstudianteLogeado.split(",");
+			String[] split = materiasPosiblesIdsEstudianteLogeado.split(",");
 
 			for (int i = 0; i < split.length; i++) {
-				materias0.add(split[i]);
+				materiasPosiblesIds.add(split[i]);
 			}
 
 			cantMateriasPosibles = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
 					.getCantidadMateriasPosibles());
 
 			// materias aprobadas del estudiante logueado:
-			List<String> materias1 = new ArrayList<String>();
+			List<String> materiasAprobadasIds = new ArrayList<String>();
 
-			String materiasAprobadasEstudianteLogeado = carreraService
+			String materiasAprobadasIdsEstudianteLogeado = carreraService
 					.getCarreraById(estudianteLogeado.getIdEstudiante()).getMateriasAprobadas();
-			String[] split1 = materiasAprobadasEstudianteLogeado.split(",");
+			String[] split1 = materiasAprobadasIdsEstudianteLogeado.split(",");
 
 			for (int i = 0; i < split1.length; i++) {
-				materias1.add(split1[i]);
+				materiasAprobadasIds.add(split1[i]);
 			}
 
 			cantMateriasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
@@ -852,7 +871,7 @@ public class AppController {
 
 			// verificamos si la materia que quiere remover en subject
 			// la tiene disponible y la puede agregar
-			if (!materias1.contains(subject)) {
+			if (!materiasAprobadasIds.contains(subject)) {
 				modelMap.put("errorMA", "No puede remover una materia que no tiene aprobada");
 
 				approvedSubjects(modelMap);
@@ -889,9 +908,9 @@ public class AppController {
 							// entonces si el prerrequisito es el mismo
 							// seleccionaremos la materia
 							// si esa materia esta en materias posibles ya la removeremos:
-							if (materias0.contains(m.getIdMateria().toString())) {
+							if (materiasPosiblesIds.contains(m.getIdMateria().toString())) {
 
-								materias0.remove(m.getIdMateria().toString());
+								materiasPosiblesIds.remove(m.getIdMateria().toString());
 								cantMateriasPosibles--;
 
 							}
@@ -904,13 +923,13 @@ public class AppController {
 				cantMateriasPosibles += 1;
 
 				// Agregando la aprobada removida a las posibles
-				materias0.add(subject);
-				nuevasMateriasPosibles = String.join(",", materias0);
+				materiasPosiblesIds.add(subject);
+				nuevasMateriasPosibles = String.join(",", materiasPosiblesIds);
 
 				// Removiendo la materia aprobada de las materias aprobadas:
-				int indexNota = materias1.indexOf(subject);
-				materias1.remove(subject);
-				nuevasMateriasAprobadas = String.join(",", materias1);
+				int indexNota = materiasAprobadasIds.indexOf(subject);
+				materiasAprobadasIds.remove(subject);
+				nuevasMateriasAprobadas = String.join(",", materiasAprobadasIds);
 
 				// eliminando la nota de la materia a remover (en su indice respectivo)
 				String[] notasAprobadas = carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
@@ -959,54 +978,63 @@ public class AppController {
 	// correlativo) como aprobada
 	// y removerla de las posibles y agregar las nuevas posibles en funcion de esa
 	// aprobada
-	List<String> prerrequisitosExcepto;
 
 	@PostMapping("/subjectsUpdateSuccess")
 	public String subjectsUpdateSuccess(@RequestParam("subject") String subject, @RequestParam("score") String score,
 			ModelMap modelMap) {
 
-		if (subject.isEmpty() || score.isEmpty()) {
-			modelMap.put("errorSU", "No deje espacios en blanco");
+			// LAS POSIBLES MATERIAS DEL ESTUDIANTE LOGEADO:
+			List<String> materiasPosiblesIds = new ArrayList<String>();
 
-			availableSubjects(modelMap);
-			return "availableSubjects.jsp";
-		} else {
-
-			// PARA MOSTRAR LAS POSIBLES MATERIAS DEL ESTUDIANTE LOGEADO:
-			List<String> materias0 = new ArrayList<String>();
-
-			String materiasPosiblesEstudianteLogeado = carreraService
+			String materiasPosiblesIdsEstudianteLogeado = carreraService
 					.getCarreraById(estudianteLogeado.getIdEstudiante()).getMateriasPosibles();
-			String[] split = materiasPosiblesEstudianteLogeado.split(",");
+			String[] split = materiasPosiblesIdsEstudianteLogeado.split(",");
 
 			for (int i = 0; i < split.length; i++) {
-				materias0.add(split[i]);
+				materiasPosiblesIds.add(split[i]);
 			}
 
-			// Para mostrar las materias aprobadas del estudiante logueado:
-			List<String> materias1 = new ArrayList<String>();
+			// Materias aprobadas del estudiante logueado:
+			List<String> materiasAprobadasIds = new ArrayList<String>();
 
-			String materiasAprobadasEstudianteLogeado = carreraService
-					.getCarreraById(estudianteLogeado.getIdEstudiante()).getMateriasAprobadas();
-			String[] split1 = materiasAprobadasEstudianteLogeado.split(",");
+			//TODO: 
+			//
+			//
+			//EN VEZ DE AGREGAR LAS MATERIAS APROBADAS POR SU REGISTRO
+			//LO HAREMOS POR EL EXCEL
 
-			for (int i = 0; i < split1.length; i++) {
-				materias1.add(split1[i]);
-			}
+			nuevasNotasAprobadas = "0";
+			cantMateriasAprobadas = 0;
 
-			// verificamos si la materia que quiere agregar en subject (como aprobada)
-			// la tiene disponible y la puede agregar
-			if (!materias0.contains(subject)) {
-				modelMap.put("errorSU", "No puede inscribir una materia que no tiene habilitada");
+			materiasAprobadasIds. add("0");
+			notasExcel.forEach((numeroCorrelativo, nota) -> {
+				materiasAprobadasIds.add(numeroCorrelativo);
 
-				availableSubjects(modelMap);
-				return "availableSubjects.jsp";
-			} else {
+				nuevasNotasAprobadas += "," + nota;
+
+				cantMateriasAprobadas = cantMateriasAprobadas + 1;
+			});
+
+			nuevasMateriasAprobadas = String.join(",", materiasAprobadasIds);
+
+
 				// sino se elimina de la lista de ids de posibles materias y
 				// se pasa al string de las materias aprobadas
 
 				// Solo se esta actualizando (removiendo) las materias posibles:
-				materias0.remove(subject);
+				//materiasPosiblesIds.remove(subject);
+
+				//TODO:
+				//
+				//ELIMINANDO DE MATERIAS POSIBLES lAS MATERIAS APROBADAS
+				
+				notasExcel.forEach((numeroCorrelativo, nota) -> {
+					materiasPosiblesIds.remove(numeroCorrelativo);
+
+				});
+			
+
+				
 
 				// Agregando las materias posibles en funcion de la que se esta aprobando:
 				//
@@ -1014,6 +1042,8 @@ public class AppController {
 
 				// Lista de tabla Materia
 				List<Materia> materias = new ArrayList<Materia>();
+
+
 				materiaService.getMaterias().forEach(m -> {
 					materias.add(m);
 				});
@@ -1027,22 +1057,29 @@ public class AppController {
 
 					// lista exceptuando el id de la materia y poder comprobar si ya se aprobaron
 					// las demas
-					// materias (si los ids de las demas paterias prerrequisito estan en aprobadas)
-					prerrequisitosExcepto = new ArrayList<>(prerrequisitos);
-					prerrequisitosExcepto.remove(subject);
+					// materias (si los ids de las demas materias prerrequisito estan en aprobadas)
+					prerrequisitosSinAprobadas = new ArrayList<>(prerrequisitos);
+					
+					//prerrequisitosSinAprobadas.remove(subject);
+
+					notasExcel.forEach((numeroCorrelativo, nota) -> {
+						prerrequisitosSinAprobadas.remove(numeroCorrelativo);
+					});
+
 
 					prerrequisitos.forEach(p -> {
 
 						// para cada prerrequisito veremos si es la materia aprobada
-						if (subject.equals(p) && materias1.containsAll(prerrequisitosExcepto)) {
+						//subject.equals(p)
+						if ( notasExcel.containsKey(p) && materiasAprobadasIds.containsAll(prerrequisitosSinAprobadas)) {
 
 							// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
 							// aprobaron
 							// seleccionaremos la materia
 							// si esa materia no esta en materias posibles ya:
-							if (!materias0.contains(m.getIdMateria().toString())) {
+							if (!materiasPosiblesIds.contains(m.getIdMateria().toString())) {
 
-								materias0.add(m.getIdMateria().toString());
+								materiasPosiblesIds.add(m.getIdMateria().toString());
 								cantMateriasPosibles++;
 
 							}
@@ -1056,17 +1093,18 @@ public class AppController {
 				cantMateriasPosibles += (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
 						.getCantidadMateriasPosibles()) - 1;
 
-				nuevasMateriasPosibles = String.join(",", materias0);
+				nuevasMateriasPosibles = String.join(",", materiasPosiblesIds);
 
 				// Actualizando las materias aprobadas:
-				materias1.add(subject);
-				nuevasMateriasAprobadas = String.join(",", materias1);
-				String nuevasNotasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
-						.getNotaAprobada()) + "," + score;
+				//materiasAprobadasIds.add(subject);
+				//?
+				 
+				// String nuevasNotasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
+				// 		.getNotaAprobada()) + "," + score;
 
 				// cantidad de materia aprobadas
-				cantMateriasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
-						.getCantidadMateriasAprobadas()) + 1;
+				// cantMateriasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
+				// 		.getCantidadMateriasAprobadas()) + 1;
 
 				// Actualizando materias posibles y materias aprobadas
 				Carrera newCarrera = carreraService.getCarreraById(estudianteLogeado.getIdEstudiante());
@@ -1079,18 +1117,15 @@ public class AppController {
 						carreraService.getCarreraById(estudianteLogeado.getIdEstudiante()));
 
 				// Reiniciando variables:
-				cantMateriasAprobadas = 0;
 				cantMateriasPosibles = 0;
 				prerrequisitos = new ArrayList<>();
 
-			}
 
 			// mostrar mensaje que la lista se ha actualizado correctamente
 			modelMap.put("nombreEstudianteUS", estudianteEjemplo.getNombreEstudiante());
 
 			return "subjectsUpdateSuccess.jsp";
 
-		}
 
 	}
 
