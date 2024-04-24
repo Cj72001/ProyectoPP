@@ -18,7 +18,7 @@
     <di>
         <div>
             <h4 class="colordiv">
-                Estas son las materias que puedes inscribir
+                Estas son tus materias aprobadas
             </h4>
             <img src="<c:url value='/resources/img/subjects.jpg'/>" width="25px"/>
         </div>

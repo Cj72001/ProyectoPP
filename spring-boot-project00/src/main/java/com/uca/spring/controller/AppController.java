@@ -126,6 +126,7 @@ public class AppController {
 	HashMap<String, String> notasExcel = new HashMap<>();
 	List<String> prerrequisitosSinAprobadas;
 	String nuevasNotasAprobadas = "0";
+	int cantMateriasAprobadas = 0, cantMateriasPosibles = 0;
 
 	//// ACTIONS PARA RUTAS (para cargar jsp):
 	// -------------------------------------------------------------------------------------------------------------------------
@@ -823,7 +824,7 @@ public class AppController {
 	// correlativo) como aprobada
 	// y removerla de las posibles y agregar las nuevas posibles en funcion de esa
 	// aprobada
-	int cantMateriasAprobadas = 0, cantMateriasPosibles = 0;
+	
 	List<String> prerrequisitos;
 
 	@PostMapping("/subjectsUpdateSuccess2")
@@ -1066,14 +1067,8 @@ public class AppController {
 						prerrequisitosSinAprobadas.remove(numeroCorrelativo);
 					});
 
-
-					prerrequisitos.forEach(p -> {
-
-						// para cada prerrequisito veremos si es la materia aprobada
-						//subject.equals(p)
-						if ( notasExcel.containsKey(p) && materiasAprobadasIds.containsAll(prerrequisitosSinAprobadas)) {
-
-							// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
+					if(!notasExcel.containsKey(m.getIdMateria().toString()) && materiasAprobadasIds.containsAll(prerrequisitos)){
+						// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
 							// aprobaron
 							// seleccionaremos la materia
 							// si esa materia no esta en materias posibles ya:
@@ -1083,15 +1078,40 @@ public class AppController {
 								cantMateriasPosibles++;
 
 							}
-						}
-					});
+					}
 
-				});
+
+				// 	prerrequisitos.forEach(p -> {
+
+				// 		// para cada prerrequisito veremos si es la materia aprobada
+				// 		//subject.equals(p)
+				// 	// 	if ( notasExcel.containsKey(p) && materiasAprobadasIds.containsAll(prerrequisitosSinAprobadas)) {
+
+				// 	// 		// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
+				// 	// 		// aprobaron
+				// 	// 		// seleccionaremos la materia
+				// 	// 		// si esa materia no esta en materias posibles ya:
+				// 	// 		if (!materiasPosiblesIds.contains(m.getIdMateria().toString())) {
+
+				// 	// 			materiasPosiblesIds.add(m.getIdMateria().toString());
+				// 	// 			cantMateriasPosibles++;
+
+				// 	// 		}
+				// 	// 	}
+				// 	// });
+				 });
 
 				// Sumando las nuevas que se contaron, mas las que ya estan posibles y
 				// restandole la aprobada
-				cantMateriasPosibles += (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
-						.getCantidadMateriasPosibles()) - 1;
+				// cantMateriasPosibles += (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
+				// 		.getCantidadMateriasPosibles()) - 1;
+
+				
+				 //Si en materias posibles esta "Bachillerato"
+				if(materiasAprobadasIds.contains("0")){
+					materiasPosiblesIds.remove("0");
+					cantMateriasPosibles = cantMateriasPosibles - 1;
+				}
 
 				nuevasMateriasPosibles = String.join(",", materiasPosiblesIds);
 
@@ -1117,7 +1137,6 @@ public class AppController {
 						carreraService.getCarreraById(estudianteLogeado.getIdEstudiante()));
 
 				// Reiniciando variables:
-				cantMateriasPosibles = 0;
 				prerrequisitos = new ArrayList<>();
 
 
