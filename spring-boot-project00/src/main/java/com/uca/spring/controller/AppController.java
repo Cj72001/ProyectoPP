@@ -1,5 +1,6 @@
 package com.uca.spring.controller;
 
+import java.io.File;
 //
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -9,8 +10,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.apache.poi.EncryptedDocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties.Servlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +50,7 @@ public class AppController {
 	MateriaService materiaService;
 	@Autowired
 	LogsService logsService;
+	
 
 	// actividades extras temporales
 	ActividadesExtra actividadExtra1 = new ActividadesExtra();
@@ -127,6 +132,7 @@ public class AppController {
 	List<String> prerrequisitosSinAprobadas;
 	String nuevasNotasAprobadas = "0";
 	int cantMateriasAprobadas = 0, cantMateriasPosibles = 0;
+	
 
 	//// ACTIONS PARA RUTAS (para cargar jsp):
 	// -------------------------------------------------------------------------------------------------------------------------
@@ -444,8 +450,12 @@ public class AppController {
 
 
 		try {
-			notasExcel = Util.getNotasExcel("C:\\Users\\omarf\\Downloads\\notas2.xlsx");
-			
+			//notasExcel = Util.getNotasExcel(new File("C:\\Users\\omarf\\Downloads\\notas2.xlsx"));
+			String directorioActual = System.getProperty("user.dir");
+			System.out.println("Directorio actual: " + directorioActual);
+
+			notasExcel = Util.getNotasExcel(new File("src/main/java/com/uca/spring/dataE/notas2.xlsx"));
+			 
 		} catch (EncryptedDocumentException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

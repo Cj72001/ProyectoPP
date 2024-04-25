@@ -1,8 +1,14 @@
 package com.uca.spring.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import org.apache.poi.EncryptedDocumentException;
+
 import com.uca.spring.model.Materia;
 
 import weka.classifiers.bayes.NaiveBayes;
@@ -73,29 +79,64 @@ public class Util2 {
 		notaMinima = 7.0;
 
 		// Setear instancias de ejemplo
-		instancia1.setValue(atributos[0], 8.5);
-		instancia1.setValue(atributos[1], "Recomendado");
-		dataset.add(instancia1);
+		// instancia1.setValue(atributos[0], 8.5);
+		// instancia1.setValue(atributos[1], "Recomendado");
+		// dataset.add(instancia1);
 
-		instancia2.setValue(atributos[0], 9.0);
-		instancia2.setValue(atributos[1], "Recomendado");
-		dataset.add(instancia2);
+		// instancia2.setValue(atributos[0], 9.0);
+		// instancia2.setValue(atributos[1], "Recomendado");
+		// dataset.add(instancia2);
 		
-		instancia3.setValue(atributos[0], 7.0);
-		instancia3.setValue(atributos[1], "Recomendado");
-		dataset.add(instancia3);
+		// instancia3.setValue(atributos[0], 7.0);
+		// instancia3.setValue(atributos[1], "Recomendado");
+		// dataset.add(instancia3);
 		
-		instancia4.setValue(atributos[0], 6.9);
-		instancia4.setValue(atributos[1], "No Recomendado");
-		dataset.add(instancia4);
+		// instancia4.setValue(atributos[0], 6.9);
+		// instancia4.setValue(atributos[1], "No Recomendado");
+		// dataset.add(instancia4);
 		
-		instancia5.setValue(atributos[0], 6.8);
-		instancia5.setValue(atributos[1], "No Recomendado");
-		dataset.add(instancia5);
+		// instancia5.setValue(atributos[0], 6.8);
+		// instancia5.setValue(atributos[1], "No Recomendado");
+		// dataset.add(instancia5);
 		
-		instancia5.setValue(atributos[0], 5.0);
-		instancia5.setValue(atributos[1], "No Recomendado");
-		dataset.add(instancia5);
+		// instancia5.setValue(atributos[0], 5.0);
+		// instancia5.setValue(atributos[1], "No Recomendado");
+		// dataset.add(instancia5);
+
+		List<File> archivosExcelEstudiantes = new ArrayList<>();
+		archivosExcelEstudiantes = Util.obtenerArchivosExcelEstudiantes();
+		
+		List<String> notasExcel = new ArrayList<>();
+		archivosExcelEstudiantes.forEach(archivo ->{
+
+			try {
+
+				notasExcel.addAll(Util.getNotasExcel(archivo).values());
+
+			} catch (EncryptedDocumentException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		});
+
+		notasExcel.forEach(nota -> {
+			Instance instancia = new DenseInstance(2);
+
+			double notaDouble = Double.valueOf(nota);
+			instancia.setValue(atributos[0], notaDouble);
+
+			if(notaDouble > notaMinima){
+				instancia.setValue(atributos[1], "Recomendado");
+			}
+			else{
+				instancia.setValue(atributos[1], "No Recomendado");
+			}
+
+			dataset.add(instancia);
+		});
+
+		System.out.println("data set listo");
 
 		// Entrenar el clasificador Naive Bayes
 		dataset.setClass(atributoRecomendacion);

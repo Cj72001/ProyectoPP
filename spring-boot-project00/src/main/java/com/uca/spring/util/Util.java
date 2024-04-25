@@ -93,12 +93,33 @@ public class Util {
 		
 	}
 
+	public static List<File> obtenerArchivosExcelEstudiantes() {
+        List<File> archivosExcelEstudiantes = new ArrayList<>();
+
+		String rutaCarpeta = "src/main/java/com/uca/spring/data";
+        File carpeta = new File(rutaCarpeta);
+        if (carpeta.exists() && carpeta.isDirectory()) {
+            File[] archivos = carpeta.listFiles();
+            if (archivos != null) {
+                for (File archivo : archivos) {
+                    if (archivo.isFile() && archivo.getName().endsWith(".xlsx")) {
+                        archivosExcelEstudiantes.add(archivo);
+                    }
+                }
+            }
+        } else {
+            System.err.println("La ruta especificada no es una carpeta válida.");
+        }
+        return archivosExcelEstudiantes;
+    }
+
 
 
 	//Obtener notas del excel de tutorias
-	public static HashMap<String, String> getNotasExcel(String pathExcel) throws EncryptedDocumentException, IOException{
+	public static HashMap<String, String> getNotasExcel(File f) throws EncryptedDocumentException, IOException{
 
-	File f = new File(pathExcel);
+	// String pathExcel = "C:\\Users\\omarf\\Downloads\\notas2.xlsx"; 	
+	// File f = new File(pathExcel);
     InputStream inp = new FileInputStream(f);
     Workbook wb = WorkbookFactory.create(inp);
     Sheet sheet = wb.getSheetAt(0);
