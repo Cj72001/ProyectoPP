@@ -1,4 +1,6 @@
 package com.uca.spring.model;
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 

@@ -52,9 +52,5 @@ public class MateriaService {
 		return "Materia eliminada";
 	}
 	
-	public String getCategoriaById(int id) {
-		Materia materia = getMateriaById(id);
-		return materia.getCategoria();
-	}
 	
 }

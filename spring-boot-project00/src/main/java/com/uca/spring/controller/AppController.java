@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 
@@ -27,13 +28,13 @@ import com.uca.spring.model.Estudiante;
 import com.uca.spring.model.Logs;
 import com.uca.spring.model.Materia;
 import com.uca.spring.model.MateriaAprobada;
+import com.uca.spring.model.MateriaExcel;
 import com.uca.spring.service.ActividadesExtraService;
 import com.uca.spring.service.CarreraService;
 import com.uca.spring.service.EstudianteService;
 import com.uca.spring.service.LogsService;
 import com.uca.spring.service.MateriaService;
 import com.uca.spring.util.Util;
-import com.uca.spring.util.Util2;
 
 @Controller
 @RequestMapping("/")
@@ -461,6 +462,9 @@ public class AppController {
 			e.printStackTrace();
 		}
 
+		//Entrenando el modelo al iniciar
+		Util.entrenarClasificador();
+
 		return "login.jsp";
 	}
 
@@ -522,11 +526,21 @@ public class AppController {
 		notaAprobada.remove(null);
 
 		// Obteniendo las materias recomendadas desde la clase Util
-		List<Materia> materiasR = Util2.materiasRecomendadas(materiasP, materiasA, notaAprobada);
+		List<MateriaExcel> materiasExcel = Util.materiasRecomendadas(new File("src/main/java/com/uca/spring/dataE/notas2.xlsx"));
+		List<Materia> materias = materiaService.getMaterias();
+		List<Materia> materiasR = new ArrayList<>();
+
+		materias.forEach(m->{
+			materiasExcel.forEach(m2->{
+				if(m.getIdMateria().toString().equals(m2.getIdMateria())){
+					materiasR.add(m);
+				}
+			});
+		});
+		
 
 		if (materiasP.isEmpty()) {
 			modelmap.addAttribute("errorSem3", "En este momento no tienes materias disponibles");
-			modelmap.addAttribute("errorSem3", "En este momento no tienes materias recomendadas");
 			return "availableSubjects.jsp";
 		} else {
 
@@ -638,12 +652,6 @@ public class AppController {
 		carreraEstudianteLogeado = null;
 		estudianteLogeado = null;
 		estudianteExiste = false;
-
-		try {
-			System.out.println(notasExcel);
-		} catch (EncryptedDocumentException e) {
-			e.printStackTrace();
-		}
 
 
 		return "login.jsp";
@@ -1026,6 +1034,15 @@ public class AppController {
 				cantMateriasAprobadas = cantMateriasAprobadas + 1;
 			});
 
+			// materiasExcel.forEach(m -> {
+				
+			// 	materiasAprobadasIds.add(Integer.toString(m.getIdMateria()));
+
+			// 	nuevasNotasAprobadas += "," + m.getNota();
+
+			// 	cantMateriasAprobadas = cantMateriasAprobadas + 1;
+			// });
+
 			nuevasMateriasAprobadas = String.join(",", materiasAprobadasIds);
 
 
@@ -1044,6 +1061,9 @@ public class AppController {
 
 				});
 			
+				// materiasExcel.forEach(m -> {
+				// 	materiasPosiblesIds.remove(Integer.toString(m.getIdMateria()));
+				// });
 
 				
 
@@ -1077,7 +1097,17 @@ public class AppController {
 						prerrequisitosSinAprobadas.remove(numeroCorrelativo);
 					});
 
-					if(!notasExcel.containsKey(m.getIdMateria().toString()) && materiasAprobadasIds.containsAll(prerrequisitos)){
+					// materiasExcel.forEach(me -> {
+					// 	prerrequisitosSinAprobadas.remove(Integer.toString(me.getIdMateria()));
+					// });
+
+					// Utilizando Streams para buscar una materia con el mismo id
+					// Optional<MateriaAprobada> materiPosible = materiasExcel.stream()
+					// .filter(objeto -> m.getIdMateria().toString().equals(objeto.getIdMateria()))
+					// .findFirst();
+	
+
+					if(!(notasExcel.containsKey(m.getIdMateria().toString())) && materiasAprobadasIds.containsAll(prerrequisitos)){
 						// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
 							// aprobaron
 							// seleccionaremos la materia
@@ -1125,16 +1155,6 @@ public class AppController {
 
 				nuevasMateriasPosibles = String.join(",", materiasPosiblesIds);
 
-				// Actualizando las materias aprobadas:
-				//materiasAprobadasIds.add(subject);
-				//?
-				 
-				// String nuevasNotasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
-				// 		.getNotaAprobada()) + "," + score;
-
-				// cantidad de materia aprobadas
-				// cantMateriasAprobadas = (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
-				// 		.getCantidadMateriasAprobadas()) + 1;
 
 				// Actualizando materias posibles y materias aprobadas
 				Carrera newCarrera = carreraService.getCarreraById(estudianteLogeado.getIdEstudiante());

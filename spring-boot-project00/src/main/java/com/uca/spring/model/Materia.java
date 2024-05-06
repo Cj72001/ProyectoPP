@@ -26,7 +26,4 @@ public class Materia {
 	
 	@Column(name="prerrequisito")
 	String preRequisito;
-	
-	@Column(name="categoria")
-	String categoria;
 }
