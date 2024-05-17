@@ -32,11 +32,8 @@ static List<MateriaExcel> materiasR = new ArrayList<>();
 static String[] idsMateriasPosiblesPrerrequisitos = new String[0];
 static int materiasPosiblesPrerrequisitosSize = 0;
 
-// Bandera para concluir si una materia es agregada a las recomendadas
-static boolean esRecomendada = false;
-
 // Nota minima
-static double notaMinima = 6.0;
+static double notaMinima = 7.0;
 
 // Referente a
 // ML:____________________________________________________________________________________________________
@@ -51,7 +48,7 @@ static Attribute atributoMateria = new Attribute("materiaId");
 static Attribute atributoPrerr = new Attribute("prerrequisitos");
 // Crear el atributo "notas" como nominal
 //static List<String> valoresNota = Arrays.asList("0.0", "1.0", "2.0");
-static Attribute atributoNotas = new Attribute("notas");
+static Attribute atributoMenorNotaPrerr = new Attribute("nota");
 
 // Crear los valores discretos para el atributo recomendacion
 static String valorRecomendado = "Recomendado";
@@ -60,7 +57,7 @@ static Attribute atributoRecomendacion = new Attribute("recomendacion",
 		Arrays.asList(valorRecomendado, valorNoRecomendado));
 
 // Crear el arreglo de atributos que evaluara
-static Attribute[] atributosArray = {atributoMateria, atributoPrerr, atributoNotas, atributoRecomendacion };
+static Attribute[] atributosArray = {atributoMateria, atributoPrerr, atributoMenorNotaPrerr, atributoRecomendacion };
 static ArrayList<Attribute> atributosLista = new ArrayList<>(Arrays.asList(atributosArray));
 
 // Crear el conjunto de datos vacío con los atributos
@@ -123,9 +120,9 @@ static NaiveBayes clasificador = new NaiveBayes();
 // 	}
 // }
 
-static String prerrequisitosStr = "",
-	          notasPrerreqsStr = "";
-static boolean notasPrerreqsAptas = true;
+static String prerrequisitosStr = "";
+static double notaMinimaPrerrequisitos = 10.0;
+
 public static void entrenarClasificador(){
 
 	// Definir el atributo recomendacion como nominal con los valores discretos
@@ -179,46 +176,49 @@ public static void entrenarClasificador(){
 
 	
 
-	Instance instancia = new DenseInstance(4);
-	prerrequisitosStr = "";
-	notasPrerreqsStr = "";
-	//Bandera para validar si todas las notas prerrequisitos son mayor o igual a la nota minima
-	notasPrerreqsAptas = true;
-
+	//Tomaremos las materias posibles del 
+	//y evaluaremos las materias prerrequisito de cada materia de cada estudiante del DataSet 
 	materiasPosiblesExcel.forEach(m->{
+		Instance instancia = new DenseInstance(4);
+		prerrequisitosStr = "";
+		
 		//Evaluamos el idMateria
 		instancia.setValue(atributosArray[0], Integer.parseInt(m.getIdMateria()));
 
 		//Evaluamos sus prerrequisitos
 		m.getPreRequisito().forEach(m2->{
 
-			//Si sus prerrequisitos son mayor a la nota minima, formaran un Str
-			//para prerrequisitosStr y notasPrerreqsStr especificos
-			//que el modelo aprendera
-			//Ej: prerrequisitosStr = 123
-			//    notasPrerreqsStr  = 10.07.07.0
-			//Solo se formaran cadenas con notas prerreqs aptas
-			if(Double.parseDouble(m2.getNota()) >= notaMinima){
-				prerrequisitosStr += m2.getIdMateria();
-				notasPrerreqsStr += m2.getNota();
+			//Evaluaremos sus prerrequisito, con el fin de obtener la nota minima de ellos
+			//y poder registrar un hashCode relacionado a un Str relacionado a los prerrequisitos
+			//Ej: 
+			//notaMinimaPrerrequisitos = 7.0
+			//prerrequisitoStr = "172210" => .hashCode()
+			//Con el fin de que el clasificador aprenda a recomendar en funcion de una nota minima
+			//Y su hashCode relacionado a los prerrquisitos 
+			if(Double.parseDouble(m2.getNota()) <= notaMinimaPrerrequisitos){
+				notaMinimaPrerrequisitos = Double.parseDouble(m2.getNota());
 			}
-			//Si alguna prerreq no se aprobo con nota minima, la bandera seniala
-			//Que esta materia evaluandose (m) no puede ser recomendada
-			else{
-				notasPrerreqsAptas = false;
-			}
+
+			//Creando la Str relacionada a los prerrequisitos
+			prerrequisitosStr += m2.getIdMateria();
 		});
 
-		//seteando el resultado de las cadenas prerrequisitosStr y notasPrerreqsStr
+		//seteando el resultado de las cadenas prerrequisitosStr y la nota minima de los prerrequisitos
 		instancia.setValue(atributosArray[1], prerrequisitosStr.hashCode());
-		instancia.setValue(atributosArray[2], notasPrerreqsStr.hashCode());
+		instancia.setValue(atributosArray[2], notaMinimaPrerrequisitos);
 
-		if(notasPrerreqsAptas){
+		//Si la nota minima de los prerrequisitos es menor a la recomendada
+		//entonces el atributo de recomendacion sera "No Recomendado"
+		//asociandolo al hashCode de las materias prerrequisito
+		if(notaMinimaPrerrequisitos >= notaMinima){
 			instancia.setValue(atributosArray[3], "Recomendado");
 		}
 		else{
 			instancia.setValue(atributosArray[3], "No Recomendado");
 		}
+
+		notaMinimaPrerrequisitos = 10.0;
+
 	});
 
 	System.out.println("data set listo");
@@ -328,7 +328,6 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 
 	Instance instanciaRecomendacion = new DenseInstance(4);
 	prerrequisitosStr = "";
-	notasPrerreqsStr = "";
 
 	materiasPosiblesExcel.forEach(m->{
 		//Evaluamos el idMateria
@@ -338,13 +337,16 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 		m.getPreRequisito().forEach(m2->{
 
 				prerrequisitosStr += m2.getIdMateria();
-				notasPrerreqsStr += m2.getNota();
+
+				if(Double.parseDouble(m2.getNota()) < notaMinimaPrerrequisitos){
+					notaMinimaPrerrequisitos = Double.parseDouble(m2.getNota());
+				}
 		
 		});
 
 		//seteando el resultado de las cadenas prerrequisitosStr y notasPrerreqsStr
 		instanciaRecomendacion.setValue(atributosArray[1], prerrequisitosStr.hashCode());
-		instanciaRecomendacion.setValue(atributosArray[2], notasPrerreqsStr.hashCode());
+		instanciaRecomendacion.setValue(atributosArray[2], notaMinimaPrerrequisitos);
 
 		instanciaRecomendacion.setDataset(dataset);
 
@@ -360,21 +362,10 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 					String recomendacionPredicha = dataset.attribute("recomendacion").value((int) resultado);
 
 					if (recomendacionPredicha.equals("Recomendado")) {
-						esRecomendada = true;
-					} else {
-						esRecomendada = false;
-					}
+						materiasR.add(m);
+					} 
 
-				
-
-		// Si la materia m cumplio con que todas las materias aprobadas que son
-		// prerrequisito se aprobaron con
-		// al menos la nota minima, entonces esta materia sera recomendada
-		if (esRecomendada) {
-
-			materiasR.add(m);
-
-		}
+		notaMinimaPrerrequisitos = 10.0;
 
 	});
 
