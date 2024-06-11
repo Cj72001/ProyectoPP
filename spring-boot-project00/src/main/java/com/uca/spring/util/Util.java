@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
-import com.uca.spring.model.Materia;
-import com.uca.spring.model.MateriaAprobada;
 import com.uca.spring.model.MateriaExcel;
 
 import weka.classifiers.bayes.NaiveBayes;
@@ -39,15 +37,13 @@ static double notaMinima = 7.0;
 // ML:____________________________________________________________________________________________________
 // Crear las instancias con los datos de entrenamiento
 //Establecer que atributos evaluara ()
+
 // Crear el atributo "materia" como nominal
-//static List<String> valoresMaterias = Arrays.asList("1", "2", "3");
 static Attribute atributoMateria = new Attribute("materiaId");
 
 // Crear el atributo "notas" como nominal
-//static List<String> valoresPrerreq = Arrays.asList("1", "2", "3");
 static Attribute atributoPrerr = new Attribute("prerrequisitos");
 // Crear el atributo "notas" como nominal
-//static List<String> valoresNota = Arrays.asList("0.0", "1.0", "2.0");
 static Attribute atributoMenorNotaPrerr = new Attribute("nota");
 
 // Crear los valores discretos para el atributo recomendacion
@@ -69,66 +65,11 @@ static NaiveBayes clasificador = new NaiveBayes();
 // ____________________________________________________________________________________________________________________
 
 // metodo de aprendizaje
-// public static void entrenarClasificador(){
-
-// 	// Definir el atributo recomendacion como nominal con los valores discretos
-// 	atributoRecomendacion.addStringValue(valorRecomendado);
-// 	atributoRecomendacion.addStringValue(valorNoRecomendado);
-
-
-// 	List<File> archivosExcelEstudiantes = new ArrayList<>();
-// 	archivosExcelEstudiantes = Util.obtenerArchivosExcelEstudiantes();
-	
-// 	List<String> notasExcel = new ArrayList<>();
-// 	archivosExcelEstudiantes.forEach(archivo ->{
-
-// 		try {
-
-// 			notasExcel.addAll(Util.getNotasExcel(archivo).values());
-
-// 		} catch (EncryptedDocumentException | IOException e) {
-// 			e.printStackTrace();
-// 		}
-
-// 	});
-
-// 	notasExcel.forEach(nota -> {
-// 		Instance instancia = new DenseInstance(2);
-
-// 		double notaDouble = Double.valueOf(nota);
-// 		instancia.setValue(atributos[0], notaDouble);
-
-// 		if(notaDouble >= notaMinima){
-// 			instancia.setValue(atributos[1], "Recomendado");
-// 		}
-// 		else{
-// 			instancia.setValue(atributos[1], "No Recomendado");
-// 		}
-
-// 		dataset.add(instancia);
-// 	});
-
-// 	System.out.println("data set listo");
-
-// 	// Entrenar el clasificador Naive Bayes
-// 	dataset.setClass(atributoRecomendacion);
-
-// 	try {
-// 		clasificador.buildClassifier(dataset);
-// 	} catch (Exception e) {
-// 		e.printStackTrace();
-// 	}
-// }
 
 static String prerrequisitosStr = "";
 static double notaMinimaPrerrequisitos = 10.0;
 
 public static void entrenarClasificador(){
-
-	// Definir el atributo recomendacion como nominal con los valores discretos
-	// atributoRecomendacion.addStringValue(valorRecomendado);
-	// atributoRecomendacion.addStringValue(valorNoRecomendado);
-
 
 	List<File> archivosExcelEstudiantes = new ArrayList<>();
 	archivosExcelEstudiantes = Util.obtenerArchivosExcelEstudiantes();
@@ -147,29 +88,13 @@ public static void entrenarClasificador(){
 	});
 
 
-	// materiasPosiblesExcel.forEach(m -> {
-	// 	Instance instancia = new DenseInstance(2);
-
-	// 	double notaDouble = Double.valueOf(m.getNota());
-	// 	instancia.setValue(atributos[0], notaDouble);
-
-	// 	if(notaDouble >= notaMinima ){
-	// 		instancia.setValue(atributos[1], "Recomendado");
-	// 	}
-	// 	else{
-	// 		instancia.setValue(atributos[1], "No Recomendado");
-	// 	}
-
-	// 	dataset.add(instancia);
-	// });
-
 	materiasPosiblesExcel.forEach(m->{
 		System.out.println("______________________________________________");
-		System.out.println("Materia: "+ m.getIdMateria()+ ", " + m.getNota());
+		System.out.println("Materia: "+ m.getIdMateria()+ ", "+ m.getNombreMateria()+", "+ m.getNota());
 		m.getPreRequisito().forEach(m2->{
 
 			System.out.println("PRERREQUISITOS:");
-			System.out.println(m2.getIdMateria()+ ", " +m2.getNota());
+			System.out.println(m2.getIdMateria()+ ", " + m.getNombreMateria()+", "+ m2.getNota());
 		});
 
 	});
@@ -219,11 +144,11 @@ public static void entrenarClasificador(){
 
 		notaMinimaPrerrequisitos = 10.0;
 
+		dataset.add(instancia);
+
 	});
 
 	System.out.println("data set listo");
-
-	
 
 	// Entrenar el clasificador Naive Bayes
 	dataset.setClass(atributoRecomendacion);
@@ -235,81 +160,6 @@ public static void entrenarClasificador(){
 	}
 }
 
-// public static List<Materia> materiasRecomendadas(List<Materia> materiasPosibles, List<Materia> materiasAprobadas,
-// 		List<Double> notaAprobada) {
-
-// 	// Una vez con la lista de materias recomendadas, se reinician las variables de
-// 	// la clase:
-// 	materiasR = new ArrayList<Materia>();
-// 	idsMateriasPosiblesPrerrequisitos = new String[0];
-// 	materiasPosiblesPrerrequisitosSize = 0;
-// 	esRecomendada = false;
-
-
-// 	// por cada materia posible iremos obteniendo sus materias prerrequisito para
-// 	// evaluar la nota
-// 	// y si las notas son aceptadas por el dataset, entonces esa materia posible se
-// 	// agregara a
-// 	// las recomendadas
-// 	materiasPosibles.forEach(m -> {
-
-// 		// guardando las materias prerrequisito de cada materia posible
-// 		idsMateriasPosiblesPrerrequisitos = m.getPreRequisito().split(",");
-// 		// size
-// 		materiasPosiblesPrerrequisitosSize = idsMateriasPosiblesPrerrequisitos.length;
-
-// 		// recorremos la lista de materias aprobadas y si el id es igual al de la
-// 		// materia aprobada, entonces
-// 		// tomaremos ese indice en materias aprobadas para evaluar la nota
-// 		for (int i = 0; i < materiasPosiblesPrerrequisitosSize; i++) {
-
-// 			for (int j = 0; j < materiasAprobadas.size(); j++) {
-
-// 				// si los ids son iguales, entonces tomaremos el indice j, para evaluar la nota
-// 				if (idsMateriasPosiblesPrerrequisitos[i]
-// 						.equals(materiasAprobadas.get(j).getIdMateria().toString())) {
-
-// 					// Crear una nueva instancia para hacer una recomendación
-// 					Instance instanciaRecomendacion = new DenseInstance(2);
-
-// 					//Seteando vaores a los atributos para ver si la materia puede ser recomendada
-// 					instanciaRecomendacion.setValue(atributoNota, Double.valueOf(notaAprobada.get(j).toString()));
-// 					instanciaRecomendacion.setDataset(dataset);
-
-// 					// Realizar la clasificación/recomendación
-// 					double resultado = 0.0;
-// 					try {
-// 						resultado = clasificador.classifyInstance(instanciaRecomendacion);
-// 					} catch (Exception e) {
-// 						e.printStackTrace();
-// 					}
-
-// 					// Obtener el valor de recomendación predicho
-// 					String recomendacionPredicha = dataset.attribute("recomendacion").value((int) resultado);
-
-// 					if (recomendacionPredicha.equals("Recomendado")) {
-// 						esRecomendada = true;
-// 					} else {
-// 						esRecomendada = false;
-// 					}
-
-// 				}
-// 			}
-
-// 		}
-
-// 		// Si la materia m cumplio con que todas las materias aprobadas que son
-// 		// prerrequisito se aprobaron con
-// 		// al menos la nota minima, entonces esta materia sera recomendada
-// 		if (esRecomendada) {
-// 			materiasR.add(m);
-
-// 		}
-
-// 	});
-
-// 	return materiasR;
-// }
 
 public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 
@@ -344,7 +194,7 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 		
 		});
 
-		//seteando el resultado de las cadenas prerrequisitosStr y notasPrerreqsStr
+		//seteando el resultado de las cadenas prerrequisitosStr y notaMinima de los prerreq
 		instanciaRecomendacion.setValue(atributosArray[1], prerrequisitosStr.hashCode());
 		instanciaRecomendacion.setValue(atributosArray[2], notaMinimaPrerrequisitos);
 
@@ -428,14 +278,16 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
       while(rowPos != rowLimit){
 		Cell codigoMateriaCell = row.getCell(1),
 		prerreqMateriaCell = row.getCell(2),
-		notaMateriaCell = row.getCell(7);
-		//nombreMateriaCell = row.getCell(3),
+		notaMateriaCell = row.getCell(7),
+		nombreMateriaCell = row.getCell(3);
 		//unidadesValorativasMateriaCell = row.getCell(6),
 
 		String codigoMateriaValue = codigoMateriaCell.toString(),
-		notaMateriaValue = notaMateriaCell.toString();
+		notaMateriaValue = notaMateriaCell.toString(),
+		nombreMateriaValue = nombreMateriaCell.toString();
 
 		MateriaExcel newMateria = new MateriaExcel();
+					 newMateria.setNombreMateria(nombreMateriaValue);
 					 newMateria.setIdMateria(getCorrelativoByCodigo(codigoMateriaValue).toString());
 					 newMateria.setNota(notaMateriaValue);
 

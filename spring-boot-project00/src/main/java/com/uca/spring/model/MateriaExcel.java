@@ -11,7 +11,7 @@ import lombok.Setter;
 public class MateriaExcel {
 
 	private String idMateria; 
-	//private String nombreMateria;
+	private String nombreMateria;
 	//private Integer uv;
 	private List<MateriaExcel> preRequisito = new ArrayList<>();
 	private String nota;
