@@ -90,11 +90,11 @@ public static void entrenarClasificador(){
 
 	materiasPosiblesExcel.forEach(m->{
 		System.out.println("______________________________________________");
-		System.out.println("Materia: "+ m.getIdMateria()+ ", "+ m.getNombreMateria()+", "+ m.getNota());
+		System.out.println("Numero Correlativo Materia Posible: "+ m.getIdMateria()+ " "+ m.getNota());
 		m.getPreRequisito().forEach(m2->{
 
-			System.out.println("PRERREQUISITOS:");
-			System.out.println(m2.getIdMateria()+ ", " + m.getNombreMateria()+", "+ m2.getNota());
+			System.out.println("PRERREQUISITOS APROBADOS:");
+			System.out.println("Numero Correlativo: "+ m2.getIdMateria()+ ", Nota: "+ m2.getNota());
 		});
 
 	});
