@@ -3,10 +3,15 @@ package com.uca.spring.controller;
 import java.io.File;
 //
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +27,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.uca.spring.model.ActividadesExtra;
 import com.uca.spring.model.Carrera;
 import com.uca.spring.model.Estudiante;
@@ -133,6 +140,8 @@ public class AppController {
 	List<String> prerrequisitosSinAprobadas;
 	String nuevasNotasAprobadas = "0";
 	int cantMateriasAprobadas = 0, cantMateriasPosibles = 0;
+	String pathExcelEstudiante = "src/main/java/com/uca/spring/dataE/notas2.xlsx";
+	String pathExcelEstudianteUpload = "src/main/java/com/uca/spring/dataE/";
 	
 
 	//// ACTIONS PARA RUTAS (para cargar jsp):
@@ -455,7 +464,7 @@ public class AppController {
 			String directorioActual = System.getProperty("user.dir");
 			System.out.println("Directorio actual: " + directorioActual);
 
-			notasExcel = Util.getNotasExcel(new File("src/main/java/com/uca/spring/dataE/notas2.xlsx"));
+			notasExcel = Util.getNotasExcel(new File(pathExcelEstudiante));
 			 
 		} catch (EncryptedDocumentException | IOException e) {
 			// TODO Auto-generated catch block
@@ -517,18 +526,37 @@ public class AppController {
 		}
 		materiasP.remove(null);
 
+		// Crear un Comparator para ordenar por id
+        Comparator<Materia> comparator = new Comparator<Materia>() {
+            @Override
+            public int compare(Materia o1, Materia o2) {
+                return Integer.compare(o1.getIdMateria(), o2.getIdMateria());
+            }
+        };
+
+		// Ordenar la lista usando Collections.sort
+        Collections.sort(materiasP, comparator);
+
 		// Agregando las materias aprobadas y sus notas
 		for (int i = 0; i < split2.length; i++) {
 			materiasA.add(materiaService.getMateriaById(Integer.parseInt(split2[i])));
 			notaAprobada.add(Double.valueOf(split3[i]));
 		}
 		materiasA.remove(null);
+
+		if(materiasA.size()==1 && materiasA.get(0).getNombreMateria().equals("Bachillerato")){
+			materiasA.remove(0);
+		}
+
 		notaAprobada.remove(null);
 
 		// Obteniendo las materias recomendadas desde la clase Util
-		List<MateriaExcel> materiasExcel = Util.materiasRecomendadas(new File("src/main/java/com/uca/spring/dataE/notas2.xlsx"));
-		List<Materia> materias = materiaService.getMaterias();
+		File f = new File(pathExcelEstudiante);
 		List<Materia> materiasR = new ArrayList<>();
+
+		if(f.exists()){
+			List<MateriaExcel> materiasExcel = Util.materiasRecomendadas(f);
+		List<Materia> materias = materiaService.getMaterias();
 
 		materias.forEach(m->{
 			materiasExcel.forEach(m2->{
@@ -537,14 +565,16 @@ public class AppController {
 				}
 			});
 		});
+		}
+		
 		
 
 		if (materiasP.isEmpty()) {
-			modelmap.addAttribute("errorSem3", "En este momento no tienes materias disponibles");
+			modelmap.addAttribute("errorSem3", "En este momento no tienes materias disponibles, Por favor agregar EXCEL");
 			return "availableSubjects.jsp";
 		} else {
 
-			if (materiasA.isEmpty()) {
+			if (materiasA.isEmpty() || !(f.exists())) {
 				modelmap.addAttribute("materias", materiasP);
 				modelmap.addAttribute("errorSem3", "En este momento no tienes materias recomendadas");
 				return "availableSubjects.jsp";
@@ -635,8 +665,8 @@ public class AppController {
 		materiasMA.remove(null);
 		materiasAprobadasIds.remove(null);
 
-		if (materiasMA.isEmpty()) {
-			modelmap.addAttribute("errorMA", "En este momento no tienes materias aprobadas");
+		if (materiasMA.size() == 1 && materiasMA.get(0).getNombreMateria().equals("Bachillerato")) {
+			modelmap.addAttribute("errorMA0", "En este momento no tienes materias aprobadas");
 			return "approvedSubjects.jsp";
 		} else {
 			modelmap.addAttribute("materiasMA", materiasAprobadasIds);
@@ -999,28 +1029,29 @@ public class AppController {
 	// aprobada
 
 	@PostMapping("/subjectsUpdateSuccess")
-	public String subjectsUpdateSuccess(@RequestParam("subject") String subject, @RequestParam("score") String score,
-			ModelMap modelMap) {
+	public String subjectsUpdateSuccess(ModelMap modelMap, @RequestParam("file") MultipartFile file) throws EncryptedDocumentException, IOException {
+
+		 if (!file.isEmpty()) {
+            try {
+                // Borra el archivo existente en la ruta
+                File existingFile = new File(pathExcelEstudianteUpload + file.getOriginalFilename());
+                if (existingFile.exists()) {
+                    existingFile.delete();
+                }
+
+                // Guarda el nuevo archivo en la ruta especificada
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(pathExcelEstudianteUpload + file.getOriginalFilename());
+                Files.write(path, bytes);
+
 
 			// LAS POSIBLES MATERIAS DEL ESTUDIANTE LOGEADO:
 			List<String> materiasPosiblesIds = new ArrayList<String>();
 
-			String materiasPosiblesIdsEstudianteLogeado = carreraService
-					.getCarreraById(estudianteLogeado.getIdEstudiante()).getMateriasPosibles();
-			String[] split = materiasPosiblesIdsEstudianteLogeado.split(",");
 
-			for (int i = 0; i < split.length; i++) {
-				materiasPosiblesIds.add(split[i]);
-			}
 
 			// Materias aprobadas del estudiante logueado:
 			List<String> materiasAprobadasIds = new ArrayList<String>();
-
-			//TODO: 
-			//
-			//
-			//EN VEZ DE AGREGAR LAS MATERIAS APROBADAS POR SU REGISTRO
-			//LO HAREMOS POR EL EXCEL
 
 			nuevasNotasAprobadas = "0";
 			cantMateriasAprobadas = 0;
@@ -1034,121 +1065,36 @@ public class AppController {
 				cantMateriasAprobadas = cantMateriasAprobadas + 1;
 			});
 
-			// materiasExcel.forEach(m -> {
-				
-			// 	materiasAprobadasIds.add(Integer.toString(m.getIdMateria()));
-
-			// 	nuevasNotasAprobadas += "," + m.getNota();
-
-			// 	cantMateriasAprobadas = cantMateriasAprobadas + 1;
-			// });
-
 			nuevasMateriasAprobadas = String.join(",", materiasAprobadasIds);
 
-
-				// sino se elimina de la lista de ids de posibles materias y
-				// se pasa al string de las materias aprobadas
-
-				// Solo se esta actualizando (removiendo) las materias posibles:
-				//materiasPosiblesIds.remove(subject);
-
-				//TODO:
-				//
-				//ELIMINANDO DE MATERIAS POSIBLES lAS MATERIAS APROBADAS
 				
 				notasExcel.forEach((numeroCorrelativo, nota) -> {
 					materiasPosiblesIds.remove(numeroCorrelativo);
 
 				});
-			
-				// materiasExcel.forEach(m -> {
-				// 	materiasPosiblesIds.remove(Integer.toString(m.getIdMateria()));
-				// });
-
-				
-
-				// Agregando las materias posibles en funcion de la que se esta aprobando:
-				//
-				//
 
 				// Lista de tabla Materia
-				List<Materia> materias = new ArrayList<Materia>();
+				List<Materia> materias = materiaService.getMaterias();
 
+				List<MateriaExcel> materiasExcelPosibles = Util.getMateriasExcel(new File(pathExcelEstudiante));
 
-				materiaService.getMaterias().forEach(m -> {
-					materias.add(m);
+				cantMateriasPosibles = 0;
+
+				materiasExcelPosibles.forEach(m->{
+					materiasPosiblesIds.add(m.getIdMateria().toString());
+					cantMateriasPosibles++;
 				});
 
-				// obteniendo las materias posibles a partir del los id aprobado
-				// y buscando las materias que tengan esos prerrequisitos
-				materias.forEach(m -> {
-
-					// por cada materia existente, se iran guardando los prerrequisitos
-					prerrequisitos = Arrays.asList(m.getPreRequisito().split(","));
-
-					// lista exceptuando el id de la materia y poder comprobar si ya se aprobaron
-					// las demas
-					// materias (si los ids de las demas materias prerrequisito estan en aprobadas)
-					prerrequisitosSinAprobadas = new ArrayList<>(prerrequisitos);
-					
-					//prerrequisitosSinAprobadas.remove(subject);
-
-					notasExcel.forEach((numeroCorrelativo, nota) -> {
-						prerrequisitosSinAprobadas.remove(numeroCorrelativo);
-					});
-
-					// materiasExcel.forEach(me -> {
-					// 	prerrequisitosSinAprobadas.remove(Integer.toString(me.getIdMateria()));
-					// });
-
-					// Utilizando Streams para buscar una materia con el mismo id
-					// Optional<MateriaAprobada> materiPosible = materiasExcel.stream()
-					// .filter(objeto -> m.getIdMateria().toString().equals(objeto.getIdMateria()))
-					// .findFirst();
-	
-
-					if(!(notasExcel.containsKey(m.getIdMateria().toString())) && materiasAprobadasIds.containsAll(prerrequisitos)){
-						// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
-							// aprobaron
-							// seleccionaremos la materia
-							// si esa materia no esta en materias posibles ya:
-							if (!materiasPosiblesIds.contains(m.getIdMateria().toString())) {
-
-								materiasPosiblesIds.add(m.getIdMateria().toString());
-								cantMateriasPosibles++;
-
-							}
+				materias.forEach(m->{
+					if(m.getNombreMateria().toLowerCase().startsWith("optativa")){
+						materiasPosiblesIds.add(m.getIdMateria().toString());
+						cantMateriasPosibles++;
 					}
-
-
-				// 	prerrequisitos.forEach(p -> {
-
-				// 		// para cada prerrequisito veremos si es la materia aprobada
-				// 		//subject.equals(p)
-				// 	// 	if ( notasExcel.containsKey(p) && materiasAprobadasIds.containsAll(prerrequisitosSinAprobadas)) {
-
-				// 	// 		// entonces si el prerrequisito es el mismo y los demas prerrequisito ya se
-				// 	// 		// aprobaron
-				// 	// 		// seleccionaremos la materia
-				// 	// 		// si esa materia no esta en materias posibles ya:
-				// 	// 		if (!materiasPosiblesIds.contains(m.getIdMateria().toString())) {
-
-				// 	// 			materiasPosiblesIds.add(m.getIdMateria().toString());
-				// 	// 			cantMateriasPosibles++;
-
-				// 	// 		}
-				// 	// 	}
-				// 	// });
-				 });
-
-				// Sumando las nuevas que se contaron, mas las que ya estan posibles y
-				// restandole la aprobada
-				// cantMateriasPosibles += (carreraService.getCarreraById(estudianteLogeado.getIdEstudiante())
-				// 		.getCantidadMateriasPosibles()) - 1;
+				});
 
 				
 				 //Si en materias posibles esta "Bachillerato"
-				if(materiasAprobadasIds.contains("0")){
+				if(materiasPosiblesIds.contains("0")){
 					materiasPosiblesIds.remove("0");
 					cantMateriasPosibles = cantMateriasPosibles - 1;
 				}
@@ -1175,6 +1121,20 @@ public class AppController {
 
 			return "subjectsUpdateSuccess.jsp";
 
+            } catch (IOException e) {
+                e.printStackTrace();
+
+				modelMap.put("errorSU", "Error al subir el archivo.");
+				return "availableSubjects.jsp";
+            }
+        } else {
+            
+			modelMap.put("errorSU", "El archivo está vacío.");
+			return "availableSubjects.jsp";
+        }
+
+			
+
 
 	}
 
@@ -1195,6 +1155,8 @@ public class AppController {
 	@PostMapping("/loginn")
 	public String login(@RequestParam("CARNET") Integer CARNET, @RequestParam("PASSWORD") String PASSWORD,
 			ModelMap modelMap) {
+
+				//materias
 
 		if (CARNET.toString().isEmpty() || PASSWORD.isEmpty()) {
 			modelMap.put("errorL", "No deje espacios en blanco");

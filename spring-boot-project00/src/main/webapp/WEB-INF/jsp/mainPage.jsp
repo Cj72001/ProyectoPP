@@ -35,6 +35,8 @@
             </div>
         </div>
 
+       <!-- <div class="separator"></div>  separator line -->
+
         <div class="flex-container2">
             <div>
             <img src="<c:url value='/resources/img/control.jpg'/>" width="8%"/>
@@ -48,15 +50,6 @@
                     <h2>Posibles</h2>
                     <p>Tienes un total de <b>${materiasDisponiblesEstudiante}</b></p>
                     <p>Posibles opciones de Materias</p>
-                </div>
-                
-                
-                <div>
-                <img src="<c:url value='/resources/img/schedule.jpg'/>" width="10%"/>
-                    <h2>Actividades Pendientes</h2>
-                    <p>Tienes un total de <b>${actividadesExtracurricularesEstudiante}</b></p>
-                    <p>de actividades pendientes</p>
-    
                 </div>
                 
                 

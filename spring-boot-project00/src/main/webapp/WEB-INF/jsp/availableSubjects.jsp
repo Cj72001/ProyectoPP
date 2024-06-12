@@ -84,24 +84,13 @@
 		<!-- termina tabla materias recomendadas-->
 
 
-		<form method="post" action="subjectsUpdateSuccess">
+		<form method="post" action="subjectsUpdateSuccess" enctype="multipart/form-data">
 			<div class="box">
 
-				<label>Materia que agregara</label> <input type="text"
-					name="subject" placeholder="Número Correlativo de la materia"
-					onFocus="field_focus(this, 'subject');"
-					onblur="field_blur(this, 'subject');" class="carnet" />
-					
-					<!-- Se agregara un input mas para la nota de la materia -->
-					<label>Nota</label> <input type="text"
-					name="score" placeholder="9.5"
-					onFocus="field_focus(this, 'subject');"
-					onblur="field_blur(this, 'subject');" class="carnet" />
-
-
 				<h3>${errorSU}</h3>
-
-				<br> <input class="btn2" type="submit" value="Agregar Materia">
+				<label for="file">Seleccionar Excel:</label>
+				<input type="file" name="file" id="file" required>
+				<br> <input class="btn2" type="submit" value="Agregar">
 			</div>
 			<!-- End Box -->
 

@@ -23,47 +23,30 @@
             <img src="<c:url value='/resources/img/subjects.jpg'/>" width="25px"/>
         </div>
         
-        <h1 class="colordiv">
-                ${errorMA0}
-         </h1>
+        <h1 class="colordiv">${errorMA0}</h1>
     
         <div>
             <table class="tablaNormal" border="1px">
-
                 <tr>
-                	<td bgcolor="#e5e5e5"> Numero Correlativo</td>
-                    <td bgcolor="#e5e5e5"> Nombre de la materia</td>
-                    <!-- <td bgcolor="#e5e5e5"> Prerequisito </td> --> 
-                    <td bgcolor="#e5e5e5"> Nota </td>
+                    <td bgcolor="#e5e5e5">Numero Correlativo</td>
+                    <td bgcolor="#e5e5e5">Nombre de la materia</td>
+                    <!-- <td bgcolor="#e5e5e5">Prerequisito</td> --> 
+                    <td bgcolor="#e5e5e5">Nota</td>
                 </tr>
                 
                 <c:forEach var="m" items="${materiasMA}">
-		
-				<tr>
-                <td>${m.getIdMateria()}</td>
-                <td>${m.getNombreMateria()}</td>
-                <!-- <td>${m.getPreRequisito()}</td>  -->
-                <td>${m.getNota()}</td>
-                </tr>
-			
-				</c:forEach>
-		
+                    <c:if test="${m.nombreMateria ne 'Bachillerato'}">
+                        <tr>
+                            <td>${m.idMateria}</td>
+                            <td>${m.nombreMateria}</td>
+                            <!-- <td>${m.preRequisito}</td>  -->
+                            <td>${m.nota}</td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
             </table>
+            
         </div>
-
-    <form method="post" action="subjectsUpdateSuccess2">
-                <div class="box">
-                
-                <label>Materia que removera</label>
-                    <input type="text" name="subject" placeholder="Número Correlativo de la materia"
-                        onFocus="field_focus(this, 'subject');" onblur="field_blur(this, 'subject');" class="carnet" />
-                    
-               
-                        <h3>${errorMA}</h3>
-                        
-                    <br> <input class="btn2" type="submit" value="Remover Materia">
-                </div> <!-- End Box --> 
-                </form>
                 
 
 
