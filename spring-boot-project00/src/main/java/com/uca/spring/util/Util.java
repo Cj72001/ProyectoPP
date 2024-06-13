@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+
 import org.apache.poi.EncryptedDocumentException;
 import com.uca.spring.model.MateriaExcel;
 
+import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -69,7 +72,11 @@ static NaiveBayes clasificador = new NaiveBayes();
 static String prerrequisitosStr = "";
 static double notaMinimaPrerrequisitos = 10.0;
 
+static int cantArchivosExcelDataSet = 0;
+
 public static void entrenarClasificador(){
+
+	cantArchivosExcelDataSet = 0;
 
 	List<File> archivosExcelEstudiantes = new ArrayList<>();
 	archivosExcelEstudiantes = Util.obtenerArchivosExcelEstudiantes();
@@ -85,9 +92,13 @@ public static void entrenarClasificador(){
 			e.printStackTrace();
 		}
 
+		cantArchivosExcelDataSet++;
 	});
 
-
+	
+	System.out.println("Se recuperaron: " + cantArchivosExcelDataSet + " archivos");
+	System.out.println();
+	System.out.println("Materias recuperadas: ");
 	materiasPosiblesExcel.forEach(m->{
 		System.out.println("______________________________________________");
 		System.out.println("Numero Correlativo Materia Posible: "+ m.getIdMateria()+ " "+ m.getNota());
@@ -98,6 +109,7 @@ public static void entrenarClasificador(){
 		});
 
 	});
+	System.out.println("DataSet listo");
 
 	
 
@@ -144,20 +156,41 @@ public static void entrenarClasificador(){
 
 		notaMinimaPrerrequisitos = 10.0;
 
+		
 		dataset.add(instancia);
 
 	});
 
-	System.out.println("data set listo");
-
+	
 	// Entrenar el clasificador Naive Bayes
 	dataset.setClass(atributoRecomendacion);
-
 	try {
 		clasificador.buildClassifier(dataset);
+
+		System.out.println();
+		System.out.println("Clasificador entrenado con exito");
+		System.out.println("Se crearon: " + dataset.numInstances() + " instancias: ");
+		dataset.forEach(i->{
+			System.out.println(i);
+		});
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
+
+	// Evaluacion del modelo
+    try {
+		Evaluation evaluacion = new Evaluation(dataset);
+	
+			// Realizar Leave-One-Out Cross-Validation
+			evaluacion.crossValidateModel(clasificador, dataset, dataset.numInstances(), new Random(1));
+	
+			// Imprimir resultados de la evaluación
+			System.out.println(evaluacion.toSummaryString("Resultados de Evaluación", false));
+			System.out.println(evaluacion.toMatrixString("Matriz de Confusión"));
+			System.out.println(evaluacion.toClassDetailsString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 }
 
 
@@ -379,7 +412,7 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 								}
 							});
 				
-							if(!materiaAprobadaAgregada){
+							if(!materiaAprobadaAgregada && Double.parseDouble(newMateria.getNota()) >= 6.0){
 								materiasExcelAprobadas.add(newMateria);
 							}
 				
