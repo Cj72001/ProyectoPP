@@ -185,6 +185,7 @@ public static void entrenarClasificador(){
 			evaluacion.crossValidateModel(clasificador, dataset, dataset.numInstances(), new Random(1));
 	
 			// Imprimir resultados de la evaluación
+			System.out.println();
 			System.out.println(evaluacion.toSummaryString("Resultados de Evaluación", false));
 			System.out.println(evaluacion.toMatrixString("Matriz de Confusión"));
 			System.out.println(evaluacion.toClassDetailsString());

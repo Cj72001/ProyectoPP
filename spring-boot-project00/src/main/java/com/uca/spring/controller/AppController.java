@@ -140,8 +140,9 @@ public class AppController {
 	List<String> prerrequisitosSinAprobadas;
 	String nuevasNotasAprobadas = "0";
 	int cantMateriasAprobadas = 0, cantMateriasPosibles = 0;
-	String pathExcelEstudiante = "src/main/java/com/uca/spring/dataE/notas2.xlsx";
-	String pathExcelEstudianteUpload = "src/main/java/com/uca/spring/dataE/";
+
+	private static final String BASE_PATH = "src/main/java/com/uca/spring/dataE/";
+    private static String pathExcelEstudiante = BASE_PATH + "notas2.xlsx"; // Default file
 	
 
 	//// ACTIONS PARA RUTAS (para cargar jsp):
@@ -1033,17 +1034,27 @@ public class AppController {
 
 		 if (!file.isEmpty()) {
             try {
-                // Borra el archivo existente en la ruta
-                File existingFile = new File(pathExcelEstudianteUpload + file.getOriginalFilename());
-                if (existingFile.exists()) {
-                    existingFile.delete();
-                }
-
-                // Guarda el nuevo archivo en la ruta especificada
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(pathExcelEstudianteUpload + file.getOriginalFilename());
-                Files.write(path, bytes);
-
+                
+				String newFileName = file.getOriginalFilename();
+					// Construir la nueva ruta del archivo
+					pathExcelEstudiante = BASE_PATH + newFileName;
+	
+					// Borrar todos los archivos existentes en la ruta
+					File directory = new File(BASE_PATH);
+					File[] files = directory.listFiles();
+					if (files != null) {
+						for (File f : files) {
+							if (f.isFile()) {
+								f.delete();
+							}
+						}
+					}
+	
+					// Guardar el nuevo archivo en la ruta especificada
+					byte[] bytes = file.getBytes();
+					Path path = Paths.get(pathExcelEstudiante);
+					Files.write(path, bytes);
+				
 
 			// LAS POSIBLES MATERIAS DEL ESTUDIANTE LOGEADO:
 			List<String> materiasPosiblesIds = new ArrayList<String>();
@@ -1057,6 +1068,7 @@ public class AppController {
 			cantMateriasAprobadas = 0;
 
 			materiasAprobadasIds. add("0");
+			notasExcel = Util.getNotasExcel(new File(pathExcelEstudiante));
 			notasExcel.forEach((numeroCorrelativo, nota) -> {
 				materiasAprobadasIds.add(numeroCorrelativo);
 
