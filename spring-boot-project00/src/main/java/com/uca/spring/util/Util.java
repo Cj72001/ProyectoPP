@@ -245,6 +245,9 @@ public static List<MateriaExcel> materiasRecomendadas(File archivo) {
 					// Obtener el valor de recomendación predicho
 					String recomendacionPredicha = dataset.attribute("recomendacion").value((int) resultado);
 
+					System.out.println("Materia: " + m.getIdMateria() + ", atributo predicho: " + recomendacionPredicha);
+
+
 					if (recomendacionPredicha.equals("Recomendado")) {
 						materiasR.add(m);
 					} 

@@ -100,7 +100,7 @@ Por un lado, nos permite tener una separación clara de responsabilidades, lo cu
 
  **Diagrama Relacional**  <a name="diagrama"></a>
  
-[![BD.jpg](https://i.postimg.cc/Vk7DxvNV/BD.jpg)](https://postimg.cc/Hryw5pXw)
+[![Diagrama-BDD-P-gina-1.png](https://i.postimg.cc/vHMsgz9C/Diagrama-BDD-P-gina-1.png)](https://postimg.cc/4n8MjpW1)
 
 ## Guia de instalación 
 <a name="guia"></a>
