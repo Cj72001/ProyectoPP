@@ -1,4 +1,4 @@
-# Manual Técnico de Sistema de Gestión de Materias con Machine Learning
+# Manual Técnico
 [![uca.png](https://i.postimg.cc/44tV6yRT/uca.png)](https://postimg.cc/HjYrHpLS)
 
 ## Índice
@@ -19,7 +19,7 @@
 	- [Requerimientos del Sistema](#req)
 	- [Software utilizado](#soft)
  - [Modelos utilizados](#modelosutilizados) 
-	 - [Patrón de diseño MVVM](#mvvm)
+	 - [Patrón de diseño MVC](#mvc)
 	 - [Diagrama Relacional](#diagrama)
 - [Guìa de instalación](#guia) 
 - [Tipos de error](#error1)
@@ -28,13 +28,16 @@
  <a name="Aspectosgenerales"></a>
  
 **Objetivos del documento**  <a name="objetivos"></a>
-El presente manual técnico tiene como objetivo principal presentar y explicar de manera detallada los distintos aspectos y herramientas que se tomaron en cuenta para el desarrollo del Sistema de Registro de Notas. Está dirigido tanto al equipo de desarrollo como al usuario final que utilizará la aplicación.
+El presente manual técnico tiene como objetivo principal presentar y explicar de manera detallada los distintos aspectos y herramientas que se tomaron en cuenta para el desarrollo del sistema. Está dirigido tanto al equipo de desarrollo como al usuario final que utilizará la aplicación.
 
 **Descripción general**  <a name="desc"></a>
-La aplicación "Sistema de Registro de Notas" es una solución innovadora que utiliza técnicas de Machine Learning para ayudar a los estudiantes de Ingeniería Informática de la Universidad Centroamericana José Simeón Cañas (UCA) a planificar y organizar de manera eficiente sus estudios. Con esta aplicación, los estudiantes pueden acceder fácilmente a un listado actualizado de las materias que pueden llevar en el próximo ciclo académico, evitando el proceso engorroso de consultar la malla curricular, esperar al sistema SIM o hacer una lista manualmente. Además, el sistema cuenta con funcionalidades adicionales para administrar actividades extracurriculares, permitiendo a los estudiantes organizar su tiempo de manera efectiva. 
-Gracias a la integración del Machine Learning, la aplicación puede ofrecer recomendaciones personalizadas basadas en el historial académico, brindando una experiencia de planificación más precisa y adaptada a las necesidades individuales.
+El sistema es una solución innovadora que utiliza técnicas de Machine Learning para ayudar a los estudiantes de Ingeniería Informática de la Universidad Centroamericana José Simeón Cañas (UCA) a planificar y organizar de manera eficiente sus estudios. Con esta aplicación, los estudiantes pueden acceder fácilmente a un listado actualizado de las materias que pueden llevar en el próximo ciclo académico, evitando el proceso engorroso de consultar la malla curricular, esperar al sistema SIM o hacer una lista manualmente.
+
+Gracias a la integración del Machine Learning, la aplicación puede ofrecer recomendaciones personalizadas basadas en el historial académico del estudiante y de otros roadmaps (DataSet), brindando una experiencia de planificación más precisa y adaptada a las necesidades individuales.
   
-La aplicación se ha desarrollado utilizando tecnologías modernas de desarrollo web, como Java para el backend, Spring Boot como framework de desarrollo, y JSP (JavaServer Pages) para la interfaz gráfica. Además, se ha utilizado una base de datos relacional para almacenar la información de los estudiantes y sus notas.
+La aplicación se ha desarrollado utilizando tecnologías de desarrollo web, como Java para el backend, Spring y Spring Boot, y JSP (JavaServer Pages) para el estructurado y CSS para la interfaz gráfica. Además, se ha utilizado una base de datos relacional para almacenar la información de los estudiantes y sus notas.
+
+Pudiendo acceder a la recomendación de materias por medio del uso de un clasificador NaiveBayes previamente modelado con archivos de "Tutoría Académica" de otros estudiantes y con el archivo que puede subir el estudiante en el apartado de materias hábiles.
 
 
 **Requisitos del Sistema**  <a name="req"></a>
@@ -63,8 +66,6 @@ La aplicación se ha desarrollado utilizando tecnologías modernas de desarrollo
  
   Para el desarrollo de la aplicación se utilizo Spring Boot Tool Suite (STS) 4 es un entorno de desarrollo integrado (IDE) basado en Eclipse, diseñado específicamente para el desarrollo de aplicaciones utilizando el framework Spring Boot. Proporciona un conjunto de herramientas y características que facilitan la creación, prueba y despliegue de aplicaciones Spring Boot.
 
-Adicional utilizamo Heroku es una plataforma en la nube que permite a los desarrolladores implementar, alojar y escalar aplicaciones web de manera sencilla. Proporciona un entorno de alojamiento confiable y seguro para ejecutar aplicaciones en línea. Con Heroku, los desarrolladores pueden desplegar sus aplicaciones sin preocuparse por la configuración y gestión de servidores, ya que Heroku se encarga de la infraestructura subyacente. Esta plataforma es compatible con varios lenguajes de programación y frameworks, lo que brinda flexibilidad a los desarrolladores para elegir las herramientas que mejor se adapten a sus necesidades. Además, Heroku ofrece características como escalabilidad automática, integración con bases de datos y un sólido soporte técnico para ayudar a los desarrolladores a implementar y mantener sus aplicaciones en la nube de manera eficiente.
-
 También se utilizaron las siguientes tecnologías:
 
 [![Tecnologias-Utilizadas.png](https://i.postimg.cc/R0HVk3RS/Tecnologias-Utilizadas.png)](https://postimg.cc/DW7TswHH)
@@ -89,7 +90,7 @@ También se utilizaron las siguientes tecnologías:
 
 ## Modelos utilizados <a name="modelosutilizados"></a>
 
-**Patrón de diseño MVVM**  <a name="mvvm"></a>
+**Patrón de diseño MVC**  <a name="mvc"></a>
 
 La arquitectura del sistema se basa en el patrón de diseño Modelo-Vista-Controlador (MVC). Este patrón se utiliza para separar la lógica de negocio, la presentación de datos y la interacción con el usuario en tres componentes principales: el Modelo, la Vista y el Controlador.
 
@@ -102,13 +103,15 @@ Por un lado, nos permite tener una separación clara de responsabilidades, lo cu
  
 [![Diagrama-BDD-P-gina-1.png](https://i.postimg.cc/vHMsgz9C/Diagrama-BDD-P-gina-1.png)](https://postimg.cc/4n8MjpW1)
 
+Aclaracion: "materiasAprobadas" y "materiasPosibles" es un String compuesto por ids de la tabla "Materia", en la tabla "Carrera" se denota lo que el estudiante registra una vez subido su archivo excel.
 ## Guia de instalación 
 <a name="guia"></a>
-- Link de documento para guia de instalacion: https://github.com/Cj72001/Proyecto-IngSoft/blob/Add-manuales/Documentos/Manual%20de%20instalacion.pdf
+- Link de documento para guia de instalacion: https://drive.google.com/file/d/19E05F2ijNoN1BdImY_sMjmIkXBHGwwND/view?usp=sharing
+
 
 ## Compatibilidad de licencias
 
-- Link de documento para la compatibilidad de Licencias: https://github.com/Cj72001/Proyecto-IngSoft/blob/Add-manuales/Documentos/Compatibilidad%20de%20licencias.pdf
+- Link de documento para la compatibilidad de Licencias: https://drive.google.com/file/d/1wKmUjBJ2ycym5XibQG-yzYKRpVllUoJh/view?usp=sharing
 
 ## **Tipos de error**  <a name="error1"></a>
 
@@ -126,8 +129,4 @@ Cabe destacar que todos los errores documentados han sido solucionados de manera
  <a name="Jira"></a>
 - Link de Jira: https://trello.com/invite/b/38tNahSa/ATTIdc4424b1f7e838c0e6ec614a72e07fa565EE6D48/codigo-abierto
  
- ## Licencia de código  
- <a name="Licencia"></a>
- - GNU General Public 
-License v3.0: https://github.com/Cj72001/Proyecto-IngSoft/commit/6f228ce874732314a961658343cc1acc18d42bdf
 
