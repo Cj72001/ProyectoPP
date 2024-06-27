@@ -1,7 +1,6 @@
 package com.uca.spring.controller;
 
 import java.io.File;
-//
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,13 +13,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.ServletContext;
-
 import org.apache.poi.EncryptedDocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties.Servlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -142,7 +136,7 @@ public class AppController {
 	int cantMateriasAprobadas = 0, cantMateriasPosibles = 0;
 
 	private static final String BASE_PATH = "src/main/java/com/uca/spring/dataE/";
-    private static String pathExcelEstudiante = BASE_PATH + "notas2.xlsx"; // Default file
+    private static String pathExcelEstudiante = BASE_PATH + ""; // Default file
 	
 
 	//// ACTIONS PARA RUTAS (para cargar jsp):
@@ -474,6 +468,9 @@ public class AppController {
 
 		//Entrenando el modelo al iniciar
 		Util.entrenarClasificador();
+
+		//Eliminar archivos de dataE
+		eliminarFiles();
 
 		return "login.jsp";
 	}
@@ -1035,20 +1032,11 @@ public class AppController {
 		 if (!file.isEmpty()) {
             try {
                 
+				eliminarFiles();
+
 				String newFileName = file.getOriginalFilename();
 					// Construir la nueva ruta del archivo
 					pathExcelEstudiante = BASE_PATH + newFileName;
-	
-					// Borrar todos los archivos existentes en la ruta
-					File directory = new File(BASE_PATH);
-					File[] files = directory.listFiles();
-					if (files != null) {
-						for (File f : files) {
-							if (f.isFile()) {
-								f.delete();
-							}
-						}
-					}
 	
 					// Guardar el nuevo archivo en la ruta especificada
 					byte[] bytes = file.getBytes();
@@ -1148,6 +1136,35 @@ public class AppController {
 			
 
 
+	}
+
+	public void eliminarFiles(){
+		// Borrar todos los archivos existentes en la ruta
+        File directory = new File(BASE_PATH);
+        if (!directory.exists()) {
+            System.out.println("La ruta especificada no existe: " + BASE_PATH);
+            return;
+        }
+        if (!directory.isDirectory()) {
+            System.out.println("La ruta especificada no es un directorio: " + BASE_PATH);
+            return;
+        }
+
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    boolean deleted = f.delete();
+                    if (deleted) {
+                        System.out.println("Archivo eliminado: " + f.getName());
+                    } else {
+                        System.out.println("No se pudo eliminar el archivo: " + f.getName());
+                    }
+                }
+            }
+        } else {
+            System.out.println("No se encontraron archivos en la ruta: " + BASE_PATH);
+        }
 	}
 
 	@PostMapping("/addSubject")
